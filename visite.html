@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>Amicale · visite guidée</title>
+<meta name="theme-color" content="#4c1d95">
+<link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+<style>
+:root{--ac:#7c3aed;--ac2:#a78bfa;--y:#facc15}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overflow:hidden}
+body{font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:#1f1830;background:radial-gradient(circle at 20% 10%,#7c3aed 0,#4c1d95 45%,#1e1238 100%);user-select:none;-webkit-user-select:none;touch-action:manipulation}
+#bg{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+#bg span{position:absolute;font-size:2rem;opacity:.12;animation:fl 18s linear infinite}
+@keyframes fl{from{transform:translateY(110vh) rotate(0)}to{transform:translateY(-20vh) rotate(360deg)}}
+#top{position:fixed;left:0;right:0;top:0;z-index:20;padding:calc(env(safe-area-inset-top) + .5rem) .8rem .4rem;display:flex;align-items:center;gap:.5rem;color:#fff}
+#chip{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.25);border-radius:2rem;padding:.25rem .7rem;font-weight:800;font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:55vw}
+#bar{flex:1;height:6px;background:rgba(255,255,255,.18);border-radius:3px;overflow:hidden}#bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--y),#fb7185);transition:width .35s}
+.ib{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:.8rem;min-width:2.3rem;height:2.3rem;font-size:1.05rem;font-weight:800;cursor:pointer}
+#stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:calc(env(safe-area-inset-top) + 3.2rem) 1rem calc(env(safe-area-inset-bottom) + 4.2rem)}
+#phone{position:relative;height:100%;aspect-ratio:390/844;max-width:100%;border-radius:2.2rem;background:#111;padding:.55rem;box-shadow:0 30px 80px rgba(0,0,0,.5),0 0 0 2px rgba(255,255,255,.12) inset}
+#scr{position:relative;width:100%;height:100%;border-radius:1.7rem;overflow:hidden;background:#fff}
+#zw{position:absolute;left:0;top:0;width:100%;aspect-ratio:390/844;transition:transform .45s ease}
+#zw.paper{aspect-ratio:794/1123;background:#fff}#zw.paper img{object-fit:contain;object-position:top}
+body.paperon:not(.crop) #phone{aspect-ratio:794/1123;padding:0;background:none;border-radius:.3rem;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+body.paperon:not(.crop) #scr{border-radius:.3rem}
+#scr img{width:100%;height:100%;object-fit:cover;object-position:top;display:block;transition:opacity .25s}
+#hole{position:absolute;border-radius:.8rem;box-shadow:0 0 0 9999px rgba(20,8,40,.55);transition:all .45s cubic-bezier(.3,1.3,.5,1);pointer-events:none}
+#hole:after{content:"";position:absolute;inset:-6px;border:3px solid var(--y);border-radius:1rem;animation:pu 1.4s ease-out infinite}
+@keyframes pu{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.12)}}
+#bub{position:fixed;z-index:15;width:min(330px,92%);background:#fff;border-radius:1.1rem;padding:.8rem .9rem .7rem;box-shadow:0 14px 40px rgba(0,0,0,.35);transition:all .45s cubic-bezier(.3,1.3,.5,1);animation:pop .4s cubic-bezier(.3,1.5,.5,1)}
+@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+#bub:before{content:"";position:absolute;left:var(--tx,50%);width:16px;height:16px;background:#fff;transform:translateX(-50%) rotate(45deg)}
+#bub.dn:before{top:-7px}#bub.up:before{bottom:-7px}
+#bub.lf:before{left:-7px;top:var(--ty,50%);transform:translateY(-50%) rotate(45deg)}
+/* paysage (iPad couché, ordinateur, vidéoprojecteur) : bulle à côté du téléphone, textes plus grands */
+body.land #phone{margin-right:min(44vw,700px)}
+/* téléphone couché (écran bas) : l'écran de l'appli devient une fenêtre zoomée sur la zone montrée */
+body.crop #stage{padding:calc(env(safe-area-inset-top) + .6rem) .6rem calc(env(safe-area-inset-bottom) + .6rem) calc(env(safe-area-inset-left) + .6rem);justify-content:flex-start}
+body.crop #phone{aspect-ratio:auto;height:100%;width:58vw;margin-right:0;border-radius:1rem;padding:0;background:none;box-shadow:0 12px 40px rgba(0,0,0,.45)}
+body.crop #scr{border-radius:1rem}
+body.crop #hint{display:none}
+body.crop #top{left:auto;right:calc(env(safe-area-inset-right) + .5rem);top:auto;bottom:calc(env(safe-area-inset-bottom) + .4rem);padding:0;width:auto}
+body.crop #chip,body.crop #bar{display:none}
+body.crop #top .ib{min-width:2rem;height:2rem;font-size:.9rem}
+body.crop #fs{display:none}
+body.crop #bub{width:calc(42vw - 2.2rem);padding:1rem 1.1rem;border-radius:1.2rem}
+body.crop #bub h3{font-size:clamp(1.1rem,5.2vh,1.6rem)}body.crop #bub p{font-size:clamp(.95rem,4.2vh,1.25rem)}
+#bub .ch{display:none}
+body.land #bub .ch{display:block;font-size:.75em;font-weight:800;color:#a78bfa;letter-spacing:.04em;text-transform:uppercase;margin-bottom:.2rem}
+/* le cadre jaune s'agrandit doucement à chaque étape */
+#hole.grow{animation:grow .6s cubic-bezier(.3,1.4,.5,1)}
+@keyframes grow{from{transform:scale(1.35);opacity:0}to{transform:scale(1);opacity:1}}
+body.land #bub{width:min(40vw,640px);padding:1.2rem 1.4rem 1.1rem;border-radius:1.4rem}
+body.land #bub h3{font-size:clamp(1.15rem,3.2vh,2.2rem);margin-bottom:.4rem}
+body.land #bub p{font-size:clamp(1rem,2.6vh,1.75rem);line-height:1.4}
+body.land #bub .who{font-size:.6em}
+body.land #chip{font-size:clamp(.85rem,2vh,1.3rem);max-width:40vw}
+body.land #cnt{font-size:clamp(.8rem,1.8vh,1.2rem)!important}
+body.land #hint .ib{font-size:clamp(1rem,2.2vh,1.5rem);height:clamp(2.8rem,6vh,4rem);min-width:clamp(7.5rem,14vw,13rem)}
+body.land #stage{padding-bottom:calc(env(safe-area-inset-bottom) + clamp(4.2rem,9vh,6rem))}
+body.land .card .em{font-size:clamp(5rem,15vh,10rem)}
+body.land .card h1{font-size:clamp(2.1rem,7vh,4.6rem)}
+body.land .card p{font-size:clamp(1rem,3vh,1.9rem);max-width:min(70vw,60rem)}
+body.land .card .go{font-size:clamp(1.05rem,2.8vh,1.8rem);padding:.8em 1.6em}
+body.land .card .sm{font-size:clamp(.8rem,1.9vh,1.2rem)}
+body.land .card .lnk a{font-size:clamp(.95rem,2.3vh,1.5rem)}
+#bub h3{margin:0 0 .25rem;font-size:1.05rem;color:#4c1d95}#bub p{margin:0;font-size:.95rem}
+#bub b{color:#5b21b6}#bub .who{display:inline-block;font-size:.72rem;font-weight:800;background:#ede9fe;color:#6d28d9;border-radius:.4rem;padding:0 .35rem;margin-left:.25rem;vertical-align:2px}
+#bub .k{display:inline-block;background:#ede9fe;color:#5b21b6;font-weight:800;border-radius:.35rem;padding:0 .3rem}
+#hint{position:fixed;left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + .7rem);z-index:20;display:flex;justify-content:center;gap:.6rem}
+#hint .ib{min-width:7.5rem;height:2.8rem;font-size:1rem}
+#hint .nx{background:var(--y);color:#3b0764;border-color:var(--y)}
+.card{position:fixed;inset:0;z-index:30;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#fff;padding:2rem;background:radial-gradient(circle at 50% 30%,rgba(124,58,237,.96),rgba(30,18,56,.98));animation:fade .35s}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.card .em{font-size:5rem;animation:bounce 1.6s ease-in-out infinite}
+@keyframes bounce{50%{transform:translateY(-14px) rotate(-6deg)}}
+.card h1{font:italic 800 2.1rem/1.15 "New York",ui-serif,Georgia,serif;margin:.6rem 0 .4rem}
+.card p{max-width:30rem;opacity:.92;margin:.2rem 0}
+.card .go{margin-top:1.4rem;background:var(--y);color:#3b0764;font-weight:900;border:0;border-radius:1rem;padding:.8rem 1.6rem;font-size:1.05rem;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.card .sm{font-size:.8rem;opacity:.7;margin-top:.8rem}
+.card .lnk{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;margin-top:1rem}
+.card .lnk a{color:#fff;font-weight:800;text-decoration:none;border:1px solid rgba(255,255,255,.5);border-radius:.8rem;padding:.55rem .9rem}
+#menu{position:fixed;inset:0;z-index:40;background:rgba(15,8,30,.7);display:none;align-items:center;justify-content:center;padding:1rem}
+#menu.on{display:flex}
+#menu .box{background:#fff;border-radius:1.2rem;padding:1rem;width:min(420px,100%);max-height:85vh;overflow:auto}
+#menu h3{margin:0 0 .5rem;color:#4c1d95}#menu button{display:flex;gap:.6rem;align-items:center;width:100%;text-align:left;background:#f5f3ff;border:0;border-radius:.8rem;padding:.65rem .8rem;margin:.3rem 0;font:inherit;font-weight:700;color:#2e1065;cursor:pointer}
+#menu button span{font-size:1.4rem}
+.conf{position:fixed;top:-3rem;font-size:1.8rem;z-index:35;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(115vh) rotate(540deg)}}
+@media(min-width:900px){#stage{padding-left:2rem;padding-right:2rem}}
+</style>
+</head>
+<body>
+<div id="bg"></div>
+<div id="top"><button class="ib" id="mb" aria-label="Chapitres">☰</button><button class="ib" id="md" aria-label="Disposition" title="Disposition : auto / téléphone / présentation">⇄</button><button class="ib" id="fs" aria-label="Plein écran" title="Plein écran">⛶</button><span id="chip"></span><div id="bar"><i></i></div><span id="cnt" style="font-size:.8rem;font-weight:700;opacity:.85"></span></div>
+<div id="stage"><div id="phone"><div id="scr"><div id="zw"><img id="img" alt=""><div id="hole"></div></div></div></div></div>
+<div id="bub"></div>
+<div id="hint"><button class="ib" id="pv">‹ Retour</button><button class="ib nx" id="nx">Suivant ›</button></div>
+<div id="menu"><div class="box"><h3>Disposition</h3><div id="mm" style="display:flex;gap:.4rem"></div><h3 style="margin-top:.8rem">Aller à…</h3><div id="ml"></div><button id="mc" style="justify-content:center;background:#ede9fe">Fermer</button></div></div>
+<script>
+/* {"g01-inviter": {"bureau": [50.0, 55.1, 81.7, 6.0], "aide": [50.0, 62.1, 81.7, 6.0]}, "g02-code": {"code": [50.0, 34.8, 81.7, 8.2], "sms": [50.0, 56.6, 81.7, 6.0]}, "g03-accueil": {"join": [50.0, 62.8, 93.0, 6.0], "card": [50.0, 31.1, 93.0, 40.4]}, "g04-saisie-code": {"code": [50.0, 52.4, 81.7, 6.9], "ok": [50.0, 59.9, 81.7, 6.0]}, "g05-fiche": {"nom": [50.0, 41.3, 81.7, 5.8], "tel": [50.0, 50.6, 81.7, 5.8], "ok": [50.0, 76.2, 81.7, 6.0]}, "g06-membres": {"inv": [44.8, 36.3, 83.5, 4.0]}, "g07-ajout-amicaliste": {"nom": [50.0, 16.0, 81.7, 5.8], "grade": [50.0, 25.3, 81.7, 5.8], "regime": [50.0, 90.7, 81.7, 5.8]}, "g08-signature": {"prix": [22.9, 52.1, 37.1, 5.8], "pm": [69.7, 52.1, 52.0, 5.8], "sig": [50.0, 68.1, 91.3, 14.4], "ok": [50.0, 94.9, 91.3, 6.0]}, "g09-amicaliste-signe": {"fiche": [44.8, 72.1, 83.5, 10.3], "stats": [44.8, 24.9, 77.4, 23.1]}, "g10-archiver-bouton": {}, "g11-archiver": {"zip": [50.0, 57.4, 81.7, 6.0]}, "g12-liberer": {"lib": [50.0, 57.5, 81.7, 6.0]}, "g13-archive": {"fiche": [44.8, 72.1, 83.5, 10.3]}, "g14-taches": {"add": [44.8, 22.3, 83.5, 4.2], "t1": [44.8, 30.0, 83.5, 10.3], "done": [44.8, 88.1, 83.5, 12.8]}, "g15-courses": {"done": [44.8, 71.1, 83.5, 7.5], "plus": [80.5, 37.2, 7.4, 3.4]}, "g16-evenements": {"noel": [44.8, 30.2, 83.5, 7.5], "add": [44.8, 15.8, 83.5, 4.2]}, "g17-noel-preparation": {"infos": [44.8, 40.5, 77.4, 42.9], "fait": [44.8, 72.4, 83.5, 12.8]}, "g18-import-liste": {"coller": [50.0, 55.2, 81.7, 6.0], "fichier": [50.0, 62.2, 81.7, 6.0]}, "g19-noel-inscrits": {"stats": [44.8, 72.2, 83.5, 12.2], "regimes": [20.1, 80.5, 34.1, 1.9], "p1": [49.9, 94.6, 68.5, 8.8]}, "g20-noel-distribution": {"jj": [23.6, 39.6, 41.0, 10.3], "ty": [66.1, 39.6, 41.0, 10.3], "cadeau": [76.1, 50.6, 20.9, 10.3], "exp": [66.1, 59.4, 41.0, 6.1]}, "g21-ce-qu-on-distribue": {"repas": [50.0, 25.2, 81.7, 5.8], "autres": [50.0, 81.1, 81.7, 5.8]}, "g22-import-inscrits": {"noms": [50.0, 53.4, 81.7, 16.9]}, "g23-noel-programme": {"pg": [44.8, 68.6, 83.5, 4.8], "add": [44.8, 97.8, 83.5, 4.2]}, "g24-jour-j": {"stats": [33.7, 14.0, 10.3, 1.7], "p1": [22.8, 50.1, 32.9, 4.2], "onglets": [59.1, 25.1, 41.6, 3.8]}, "g25-affiche": {"aff": [50.0, 54.0, 98.0, 92.0], "style": [50.0, 55.4, 89.3, 2.7]}, "g26-agenda-noel": {"j19": [67.3, 58.4, 11.2, 9.3], "ev": [52.7, 88.9, 62.8, 2.6]}, "g27-note-bilan": {"titre": [44.8, 30.7, 72.6, 7.2], "dec": [44.8, 61.4, 72.6, 3.4]}, "g28-impression": {"af": [50.0, 42.8, 81.7, 6.0], "all": [50.0, 49.8, 81.7, 6.0], "pg": [50.0, 56.8, 81.7, 6.0], "ck": [50.0, 63.8, 81.7, 6.0]}, "a2-ajout": {"nom": [50.0, 39.0, 81.7, 5.8], "dossier": [50.0, 48.3, 81.7, 5.8], "ev": [50.0, 57.6, 81.7, 5.8]}, "a3-apercu": {"pv": [50.0, 42.7, 81.7, 53.2], "send": [50.0, 81.2, 81.7, 6.0]}, "a1-liste": {"add": [44.8, 44.2, 68.2, 4.0], "chips": [44.8, 60.7, 83.5, 22.0], "send": [76.5, 82.2, 11.8, 5.4]}, "a4-dossiers": {"perso": [21.9, 69.8, 37.6, 3.8]}, "a5-evenement-docs": {"docs": [44.8, 12.8, 83.5, 2.0], "join": [44.8, 59.5, 83.5, 4.0]}} est remplacé par les positions mesurées lors des captures */
+const MK={"g01-inviter": {"bureau": [50.0, 55.1, 81.7, 6.0], "aide": [50.0, 62.1, 81.7, 6.0]}, "g02-code": {"code": [50.0, 34.8, 81.7, 8.2], "sms": [50.0, 56.6, 81.7, 6.0]}, "g03-accueil": {"join": [50.0, 62.8, 93.0, 6.0], "card": [50.0, 31.1, 93.0, 40.4]}, "g04-saisie-code": {"code": [50.0, 52.4, 81.7, 6.9], "ok": [50.0, 59.9, 81.7, 6.0]}, "g05-fiche": {"nom": [50.0, 41.3, 81.7, 5.8], "tel": [50.0, 50.6, 81.7, 5.8], "ok": [50.0, 76.2, 81.7, 6.0]}, "g06-membres": {"inv": [44.8, 36.3, 83.5, 4.0]}, "g07-ajout-amicaliste": {"nom": [50.0, 16.0, 81.7, 5.8], "grade": [50.0, 25.3, 81.7, 5.8], "regime": [50.0, 90.7, 81.7, 5.8]}, "g08-signature": {"prix": [22.9, 52.1, 37.1, 5.8], "pm": [69.7, 52.1, 52.0, 5.8], "sig": [50.0, 68.1, 91.3, 14.4], "ok": [50.0, 94.9, 91.3, 6.0]}, "g09-amicaliste-signe": {"fiche": [44.8, 72.1, 83.5, 10.3], "stats": [44.8, 24.9, 77.4, 23.1]}, "g10-archiver-bouton": {}, "g11-archiver": {"zip": [50.0, 57.4, 81.7, 6.0]}, "g12-liberer": {"lib": [50.0, 57.5, 81.7, 6.0]}, "g13-archive": {"fiche": [44.8, 72.1, 83.5, 10.3]}, "g14-taches": {"add": [44.8, 22.3, 83.5, 4.2], "t1": [44.8, 30.0, 83.5, 10.3], "done": [44.8, 88.1, 83.5, 12.8]}, "g15-courses": {"done": [44.8, 71.1, 83.5, 7.5], "plus": [80.5, 37.2, 7.4, 3.4]}, "g16-evenements": {"noel": [44.8, 30.2, 83.5, 7.5], "add": [44.8, 15.8, 83.5, 4.2]}, "g17-noel-preparation": {"infos": [44.8, 40.5, 77.4, 42.9], "fait": [44.8, 72.4, 83.5, 12.8]}, "g18-import-liste": {"coller": [50.0, 55.2, 81.7, 6.0], "fichier": [50.0, 62.2, 81.7, 6.0]}, "g19-noel-inscrits": {"stats": [44.8, 72.2, 83.5, 12.2], "regimes": [20.1, 80.5, 34.1, 1.9], "p1": [49.9, 94.6, 68.5, 8.8]}, "g20-noel-distribution": {"jj": [23.6, 39.6, 41.0, 10.3], "ty": [66.1, 39.6, 41.0, 10.3], "cadeau": [76.1, 50.6, 20.9, 10.3], "exp": [66.1, 59.4, 41.0, 6.1]}, "g21-ce-qu-on-distribue": {"repas": [50.0, 25.2, 81.7, 5.8], "autres": [50.0, 81.1, 81.7, 5.8]}, "g22-import-inscrits": {"noms": [50.0, 53.4, 81.7, 16.9]}, "g23-noel-programme": {"pg": [44.8, 68.6, 83.5, 4.8], "add": [44.8, 97.8, 83.5, 4.2]}, "g24-jour-j": {"stats": [33.7, 14.0, 10.3, 1.7], "p1": [22.8, 50.1, 32.9, 4.2], "onglets": [59.1, 25.1, 41.6, 3.8]}, "g25-affiche": {"aff": [50.0, 54.0, 98.0, 92.0], "style": [50.0, 55.4, 89.3, 2.7]}, "g26-agenda-noel": {"j19": [67.3, 58.4, 11.2, 9.3], "ev": [52.7, 88.9, 62.8, 2.6]}, "g27-note-bilan": {"titre": [44.8, 30.7, 72.6, 7.2], "dec": [44.8, 61.4, 72.6, 3.4]}, "g28-impression": {"af": [50.0, 42.8, 81.7, 6.0], "all": [50.0, 49.8, 81.7, 6.0], "pg": [50.0, 56.8, 81.7, 6.0], "ck": [50.0, 63.8, 81.7, 6.0]}, "a2-ajout": {"nom": [50.0, 39.0, 81.7, 5.8], "dossier": [50.0, 48.3, 81.7, 5.8], "ev": [50.0, 57.6, 81.7, 5.8]}, "a3-apercu": {"pv": [50.0, 42.7, 81.7, 53.2], "send": [50.0, 81.2, 81.7, 6.0]}, "a1-liste": {"add": [44.8, 44.2, 68.2, 4.0], "chips": [44.8, 60.7, 83.5, 22.0], "send": [76.5, 82.2, 11.8, 5.4]}, "a4-dossiers": {"perso": [21.9, 69.8, 37.6, 3.8]}, "a5-evenement-docs": {"docs": [44.8, 12.8, 83.5, 2.0], "join": [44.8, 59.5, 83.5, 4.0]}};
+const FIX={'a5-evenement-docs':{docs:[44.8,33,83.5,38]},'g02-code':{code:[50,41.5,82,7]},'g06-membres':{claire:[45,19.5,83,7.5]},'g25-affiche':{aff:[50,27,52,40]},'g24-jour-j':{stats:[45,15,88,9]}};
+const C=[
+ {em:'👋',t:'Bienvenue dans Amicale',p:'L’appli de ton groupe : membres, agenda, tâches, courses, événements, bulletins. Suis la visite : touche l’écran (ou la flèche ›) pour avancer.'},
+ {em:'📩',t:'Rejoindre le groupe',p:'Paul, le président, invite Claire au bureau. En 1 minute, elle a sa fiche.',s:[
+  ['g01-inviter','bureau','Choisir le niveau','<b>Paul</b><span class="who">admin</span> invite quelqu’un. <b>Bureau</b> : voit tout.'],
+  ['g01-inviter','aide','Ou « Aide extérieur »','Les aides voient seulement ce qu’on partage avec eux : pas les amicalistes, pas les bulletins, pas les notes.'],
+  ['g02-code','code','Un code secret','8 caractères, valable 7 jours, pour <b>une seule</b> personne.'],
+  ['g02-code','sms','Envoyer par SMS','Le message contient le lien de l’appli Amicale et le code. 📲'],
+  ['g03-accueil','join','Claire reçoit le SMS','Elle installe l’appli avec le lien, puis touche <b>Rejoindre avec un code</b>.'],
+  ['g04-saisie-code','code','Elle tape le code','Ou elle colle tout le SMS : l’appli trouve le code toute seule. 🪄'],
+  ['g05-fiche','nom','Sa fiche','Son nom tel qu’il apparaîtra. Téléphone et mails : facultatifs.'],
+  ['g05-fiche','ok','Rejoindre !','C’est tout. Les échanges du groupe sont <b>chiffrés</b> 🔒'],
+  ['g06-membres','claire','Paul la voit arriver','Il touche sa fiche pour lui donner un <b>titre</b> (secrétaire, trésorière…), l’appeler ou lui écrire.']]},
+ {em:'✍️',t:'Inscrire un amicaliste',p:'Claire inscrit Jean Dupont, sergent, 20 € par carte. Il signe au doigt sur le téléphone.',s:[
+  ['g07-ajout-amicaliste','nom','Nouvel amicaliste','Onglet <span class="k">Amicalistes</span> › <span class="k">+ Ajouter</span>. Nom en MAJUSCULES, c’est plus lisible.'],
+  ['g07-ajout-amicaliste','grade','Grade, catégorie…','Grade, catégorie, adhésion, cotisation, patch… et en bas « faire signer le bulletin ».'],
+  ['g07-ajout-amicaliste','regime','Régime particulier','Halal, végétarien, allergie : il ressortira en orange dans les repas. 🍽'],
+  ['g08-signature','prix','Le prix se calcule tout seul','D’après le grade : les tarifs sont réglés <b>une fois</b> par l’administrateur pour tout le bureau.'],
+  ['g08-signature','pm','Le règlement','Carte, espèces, chèque ou virement.'],
+  ['g08-signature','sig','Signature au doigt ✍️','On tend le téléphone, il signe. « Effacer » pour recommencer.'],
+  ['g08-signature','ok','Valider','Le bulletin PDF est créé et envoyé à tout le bureau (pas aux aides).'],
+  ['g09-amicaliste-signe','fiche','Et voilà !','« cotisation ✓ 20 € (CB) · bulletin ✓ · <b>inscrit par Claire Moreau</b> ». On sait qui a fait quoi.']]},
+ {em:'🗄',t:'Archiver les bulletins',p:'Une fois par an, l’administrateur range tous les bulletins signés dans un seul fichier.',s:[
+  ['g11-archiver','zip','Un ZIP de PDF','Un PDF par personne, nommé <b>NOM-Prénom</b>. Sur iPhone : « Enregistrer dans Fichiers ».'],
+  ['g12-liberer','lib','Libérer la place','Seulement quand le ZIP est bien rangé : les signatures quittent tous les téléphones.'],
+  ['g13-archive','fiche','La fiche reste','Elle garde « 📝 bulletin archivé ». La liste ne perd rien.']]},
+ {em:'🛒',t:'Tâches et courses',p:'Qui fait quoi ? Ça se voit d’un coup d’œil.',s:[
+  ['g14-taches','add','Une tâche','Quoi, <b>pour qui</b> 👤, pour quand 📅, bureau seulement 🔒 ou tout le monde.'],
+  ['g14-taches','t1','Qui s’en occupe','👤 la personne chargée, ✍️ celle qui l’a écrite.'],
+  ['g14-taches','done','Faites ✅','On coche, elle passe dans « Faites » avec le nom de celui qui l’a cochée.'],
+  ['g15-courses','plus','Les courses','Plusieurs listes (Courses, Buvette, Local…), rangées par rayon, quantités avec − et +.'],
+  ['g15-courses','done','Dans le chariot 🛒','Au magasin on coche : « ✅ Luc Martin ». Personne n’achète deux fois la même chose !']]},
+ {em:'🎄',t:'La soirée de Noël',p:'De la préparation au soir même : inscrits, argent, régimes, cadeaux, affiche, Jour J.',s:[
+  ['g16-evenements','noel','Un événement','Onglet <span class="k">Événements</span> : la soirée du 19 décembre, avec sa préparation ✅ 3/7.'],
+  ['g17-noel-preparation','infos','Les infos','Date, lieu, description, visible par le bureau seul ou aussi par les aides.'],
+  ['g17-noel-preparation','fait','La préparation','Chaque ligne a son responsable. Quand c’est fait : « ✅ <b>fait par Luc Martin</b> » et l’heure.'],
+  ['g18-import-liste','coller','Importer une liste','Colle une liste depuis Word, Notes ou un mail, ou choisis un fichier Excel/Word. 📥'],
+  ['g19-noel-inscrits','stats','Les totaux','Présents, tickets, et <b>l’argent encaissé</b> par CB, espèces, chèques, virements. 💶'],
+  ['g19-noel-inscrits','regimes','Régimes en orange','Halal, végétarien, allergie : à donner au traiteur.'],
+  ['g19-noel-inscrits','p1','Chaque inscrit','Amicalistes et non-amicalistes triés tout seuls. 2 repas pour un couple.'],
+  ['g22-import-inscrits','noms','Ajouter des noms','Une liste collée : ceux qui sont amicalistes sont reconnus tout seuls.'],
+  ['g20-noel-distribution','ty','Ce qu’on distribue','Pour Noël : ✅ Arrivé, 🍽 Repas, 🍷 Boisson, 🎁 Cadeau… ou tes propres rubriques.'],
+  ['g20-noel-distribution','cadeau','+1 pour tous 🎁','On touche le bouton : ça ajoute <b>un cadeau à tout le monde</b>. Les boutons d’à côté font pareil pour l’arrivée, le repas et la boisson.'],
+  ['g20-noel-distribution','exp','Exporter (Excel)','La liste complète pour le traiteur ou le trésorier, régimes compris.'],
+  ['g23-noel-programme','pg','Le programme','18:30 accueil, 19:30 repas, 21:00 le Père Noël 🎅…'],
+  ['a5-evenement-docs','docs','📎 Les documents de la soirée','Permis feu, devis du traiteur, contrat de la salle… joints à l’événement. ✉️ pour les envoyer.'],
+  ['a5-evenement-docs','join','Joindre un document','Il est aussi rangé dans 📁 Administratif, dans le dossier de ton choix.'],
+  ['g25-affiche','aff','L’affiche 🖼','Style Noël choisi tout seul. Couleurs, textes, logo, photos : tout se déplace au doigt. Elle est partagée avec le groupe. <b>Impression possible</b> 🖨 : on regarde juste après.'],
+  ['g28-impression','af','Imprimer : 4 documents 🖨','Bouton <span class="k">🖨 Imprimer · affiche · PDF</span> : on choisit le document. Sur iPhone et iPad, on obtient un PDF à imprimer ou à envoyer.'],
+  ['p1-affiche','*','🖼 L’affiche à placarder','Format A4, en couleurs ou en noir et blanc. Prête à imprimer et à afficher.'],
+  ['p2-fiche','*','📄 La fiche complète','Description, programme et liste de préparation avec les responsables : pour la réunion ou le classeur.'],
+  ['p3-programme','*','🕐 Le programme seul','À afficher à l’entrée ou à donner aux bénévoles.'],
+  ['p4-preparation','*','✅ La liste de préparation','Les cases à cocher, avec qui fait quoi : pour le jour de l’installation.'],
+  ['g26-agenda-noel','j19','Dans l’agenda 📅','Rien à recopier : la soirée apparaît dans l’agenda du groupe le samedi 19.'],
+  ['g24-jour-j','stats','Le soir même : Jour J','En haut : ce qu’il reste à donner (repas, boissons, cadeaux).'],
+  ['g24-jour-j','onglets','Trouver quelqu’un','Recherche, grade, régime, onglets Amicalistes / Non-amicalistes / Terminés.'],
+  ['g24-jour-j','p1','Un appui par ticket','« Arrivé 1/2, 2/2 » pour un couple. Tout remis : la personne passe dans « Terminés ». Plusieurs téléphones en même temps !']]},
+ {em:'📝',t:'Le bilan de la réunion',p:'Le secrétaire écrit, tout le bureau retrouve.',s:[
+  ['g27-note-bilan','titre','Une note propre','Onglet <span class="k">Notes</span>. Auteur et date en dessous. Bureau seulement 🔒'],
+  ['g27-note-bilan','dec','Facile à écrire','Une ligne avec <b>#</b> = un titre, avec <b>-</b> = une puce. S’imprime et se partage.']]}
+];
+C.push({em:'📁',t:'Administratif',p:'Les documents importants du bureau au même endroit : statuts, règlement, AG, assurance, préfecture… et vos propres dossiers.',s:[
+  ['a1-liste','add','Ajouter un document','PDF, Word, Excel, photo ou scan (6 Mo maximum). <b>Tout le bureau</b> peut en ajouter.'],
+  ['a2-ajout','dossier','Le ranger','On choisit le dossier… ou on crée le sien avec « ＋ Nouveau dossier ».'],
+  ['a2-ajout','ev','Le lier à un événement','Facultatif : il apparaît aussi dans la fiche de la soirée (📎 Documents).'],
+  ['a1-liste','chips','Les dossiers','Une pastille par dossier pour retrouver vite : statuts, AG, assurance, préfecture et mairie…'],
+  ['a4-dossiers','perso','Vos propres dossiers','Ici « Soirée de Noël », créé par le bureau : chacun range comme il veut.'],
+  ['a3-apercu','pv','L’aperçu','On touche un document : il s’affiche tout de suite (PDF, photo…).'],
+  ['a3-apercu','send','✉️ L’envoyer','Sur iPhone, Mail s’ouvre avec la pièce jointe : direct sur ta boîte mail pro. Ou 💾 l’enregistrer.'],
+  ['a1-liste','send','Chiffré, bureau seulement 🔒','Les aides ne voient pas cet onglet. Un document supprimé disparaît chez tout le monde.']]});
+const FIN={em:'🎉',t:'Bravo, tu sais tout !',p:'Essaie toi-même dans la démo : rien n’y est enregistré.'};
+// suite linéaire : carte de chapitre puis ses étapes
+const Q=[];C.forEach((c,ci)=>{Q.push({card:c,ci});(c.s||[]).forEach(s=>Q.push({ci,img:s[0],mk:s[1],t:s[2],p:s[3]}))});Q.push({card:FIN,fin:1,ci:C.length});
+let i=0;const $=s=>document.querySelector(s);
+Q.forEach(q=>{if(q.img){const im=new Image();im.src='guide/'+q.img+'.jpg'}});
+function box(q){if(q.mk==='*')return[50,30,100,40];const f=(FIX[q.img]||{})[q.mk];return f||((MK[q.img]||{})[q.mk])||[50,50,80,10]}
+function show(){
+ document.querySelectorAll('.card').forEach(e=>e.remove());const MD=vMode(),autoLand=innerWidth>innerHeight*1.15&&innerWidth>=700,landOn=MD==='paysage'||(MD==='auto'&&(autoLand||(innerWidth>innerHeight&&innerHeight<620))),crop=landOn&&innerHeight<620;document.body.classList.toggle('crop',crop);document.body.classList.toggle('land',landOn);$('#md').textContent=MD==='portrait'?'📱':MD==='paysage'?'🖥':'⇄';$('#bub').style.display=Q[i].card?'none':'';
+ const q=Q[i];$('#bar i').style.width=(100*i/(Q.length-1))+'%';$('#cnt').textContent=(i+1)+'/'+Q.length;
+ const c=C[q.ci]||FIN;$('#chip').textContent=(c.em||'')+' '+c.t;
+ if(q.card){const d=document.createElement('div');d.className='card';
+  d.innerHTML='<div class="em">'+q.card.em+'</div><h1>'+q.card.t+'</h1><p>'+q.card.p+'</p>'+(q.fin?'<div class="lnk"><a href="./">📱 Ouvrir l’appli</a><a href="./?demo=1">🧪 Essayer la démo</a><a href="guide.html">📖 Le guide à lire</a></div><button class="go" data-r="1">↺ Revoir la visite</button>':'<button class="go">'+(i===0?'C’est parti ! ▶':'Voir ▶')+'</button>'+(i===0?'<div class="sm">Astuce : touche à droite pour avancer, à gauche pour revenir. Flèches du clavier sur ordinateur.</div>':''));
+  document.body.appendChild(d);if(q.fin)confetti();return}
+ const img=$('#img'),src='guide/'+q.img+'.jpg';if(!img.src.endsWith(src)){img.style.opacity=0;img.onload=()=>img.style.opacity=1;img.src=src}
+ const paper=q.img[0]==='p';document.body.classList.toggle('paperon',paper);$('#zw').classList.toggle('paper',paper);
+ const [x,y,w,h]=box(q),H=$('#hole'),pad=1.2;H.style.display=paper?'none':'';
+ H.style.left=(x-w/2-pad)+'%';H.style.top=(y-h/2-pad*0.5)+'%';H.style.width=(w+2*pad)+'%';H.style.height=(h+pad)+'%';
+ const B=$('#bub');B.style.display='';B.style.animation='none';void B.offsetWidth;B.style.animation='';
+ B.innerHTML='<div class="ch">'+(C[q.ci]?C[q.ci].em+' '+C[q.ci].t+' · '+(i+1)+'/'+Q.length:'')+'</div><h3>'+q.t+'</h3><p>'+q.p+'</p>';
+ H.classList.remove('grow');void H.offsetWidth;H.classList.add('grow');
+ const r=$('#scr').getBoundingClientRect(),land=document.body.classList.contains('land'),Z=$('#zw');
+ const k=crop&&!paper?1.3:1,zw=r.width*k;Z.style.width=zw+'px';
+ const zh=zw*(paper?1123/794:844/390),ty=zh>r.height+2?Math.max(r.height-zh,Math.min(0,r.height/2-y/100*zh)):0,tx=k>1?Math.max(r.width-zw,Math.min(0,r.width/2-x/100*zw)):0;Z.style.transform='translate('+tx+'px,'+ty+'px)';
+ const zt=r.top+ty,mx=r.left+tx+x/100*zw,my=zt+y/100*zh,mt=zt+(y-h/2)/100*zh,mb=zt+(y+h/2)/100*zh;
+ B.style.width=land?(crop?Math.max(200,innerWidth-r.right-30)+'px':''):Math.min(330,r.width-16)+'px';
+ const bw=B.offsetWidth,bh=B.offsetHeight;
+ if(land){const left=r.right+(crop?18:28);let top=(innerHeight-bh)/2;if(my<top+24)top=my-24;if(my>top+bh-24)top=my-bh+24;top=Math.max(8,Math.min(innerHeight-bh-8,top));
+  B.className='lf';B.style.left=left+'px';B.style.top=top+'px';B.style.setProperty('--ty',Math.max(20,Math.min(bh-20,my-top))+'px');return}
+ if(paper){B.className='';B.style.left=(r.left+(r.width-bw)/2)+'px';B.style.top=(r.bottom-bh-10)+'px';return}
+ let left=mx-bw/2;left=Math.max(r.left+8,Math.min(r.right-bw-8,left));
+ const below=y<52;let top=below?(mb+14):(mt-bh-14);
+ if(below&&top+bh>r.bottom-6)top=Math.max(r.top+6,mt-bh-14);if(!below&&top<r.top+6)top=Math.min(r.bottom-bh-6,mb+14);
+ B.className=top>my?'dn':'up';B.style.left=left+'px';B.style.top=top+'px';
+ B.style.setProperty('--tx',Math.max(18,Math.min(bw-18,mx-left))+'px');
+}
+function go(n){i=Math.max(0,Math.min(Q.length-1,i+n));show()}
+function confetti(){const E=['🎉','🎄','🎁','⭐','🎊','💜','✨'];for(let k=0;k<40;k++){const s=document.createElement('span');s.className='conf';s.textContent=E[k%E.length];s.style.left=Math.random()*100+'vw';s.style.animationDuration=(2.5+Math.random()*2.5)+'s';s.style.animationDelay=Math.random()*1.2+'s';document.body.appendChild(s);setTimeout(()=>s.remove(),6500)}}
+document.addEventListener('click',e=>{
+ if(e.target.closest('#menu')||e.target.closest('#top')||e.target.closest('a'))return;
+ if(e.target.id==='pv'){go(-1);return}if(e.target.id==='nx'){go(1);return}
+ const g=e.target.closest('.go');if(g){if(g.dataset.r){i=0;show()}else go(1);return}
+ if(e.target.closest('.card'))return;
+ go(e.clientX<innerWidth*0.33?-1:1)});
+document.addEventListener('keydown',e=>{if(['ArrowRight',' ','Enter','PageDown'].includes(e.key)){e.preventDefault();go(1)}else if(['ArrowLeft','PageUp','Backspace'].includes(e.key)){e.preventDefault();go(-1)}else if(e.key==='Escape')$('#menu').classList.remove('on')});
+let tx0=null;document.addEventListener('touchstart',e=>{tx0=e.touches[0].clientX},{passive:true});
+document.addEventListener('touchend',e=>{if(tx0==null)return;const dx=e.changedTouches[0].clientX-tx0;tx0=null;if(Math.abs(dx)>60){go(dx<0?1:-1);e.preventDefault()}},{passive:false});
+function vMode(){try{return localStorage.getItem('agd-am-visite')||'auto'}catch(e){return 'auto'}}
+function setMode(m){try{localStorage.setItem('agd-am-visite',m)}catch(e){}show()}
+const MDL=[['auto','⇄ Auto'],['portrait','📱 Téléphone'],['paysage','🖥 Présentation']];
+$('#md').onclick=()=>{const m=vMode(),k=MDL.findIndex(x=>x[0]===m);setMode(MDL[(k+1)%3][0]);const t=document.createElement('div');t.textContent=MDL[(k+1)%3][1];t.style.cssText='position:fixed;left:50%;top:4rem;transform:translateX(-50%);background:#fff;color:#4c1d95;font-weight:800;padding:.4rem .9rem;border-radius:1rem;z-index:50';document.body.appendChild(t);setTimeout(()=>t.remove(),1200)};
+$('#fs').onclick=()=>{try{const d=document.documentElement;if(document.fullscreenElement||document.webkitFullscreenElement){(document.exitFullscreen||document.webkitExitFullscreen).call(document)}else{(d.requestFullscreen||d.webkitRequestFullscreen).call(d)}}catch(e){}};
+$('#mm').onclick=e=>{const b=e.target.closest('[data-m]');if(!b)return;$('#menu').classList.remove('on');setMode(b.dataset.m)};
+$('#mb').onclick=()=>{$('#mm').innerHTML=MDL.map(x=>'<button data-m="'+x[0]+'" style="justify-content:center;'+(vMode()===x[0]?'background:#7c3aed;color:#fff':'')+'">'+x[1]+'</button>').join('');$('#ml').innerHTML=C.map((c,ci)=>'<button data-c="'+ci+'"><span>'+c.em+'</span>'+c.t+'</button>').join('');$('#menu').classList.add('on')};
+$('#ml').onclick=e=>{const b=e.target.closest('[data-c]');if(!b)return;i=Q.findIndex(q=>q.ci===+b.dataset.c);$('#menu').classList.remove('on');show()};
+$('#mc').onclick=()=>$('#menu').classList.remove('on');
+addEventListener('resize',show);
+{const E=['🎄','🎁','📅','🛒','✍️','🎉','👥','⭐'];let h='';for(let k=0;k<14;k++)h+='<span style="left:'+(k*7.3)%100+'vw;animation-delay:-'+(k*1.3)+'s;animation-duration:'+(14+k%5*3)+'s">'+E[k%E.length]+'</span>';$('#bg').innerHTML=h}
+const h0=parseInt((location.hash.match(/s=(\d+)/)||[])[1]);if(h0>=0&&h0<Q.length)i=h0;
+show();
+</script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{
+ "id": "/amicale/",
+ "name": "Amicale",
+ "short_name": "Amicale",
+ "description": "L’appli de ton groupe (amicale, club, association) : membres, agenda, tâches, courses, événements. Chiffré, sans compte, sans publicité.",
+ "lang": "fr",
+ "dir": "ltr",
+ "start_url": "./",
+ "scope": "./",
+ "display": "standalone",
+ "orientation": "any",
+ "background_color": "#f7f4ec",
+ "theme_color": "#7c3aed",
+ "categories": ["productivity", "social"],
+ "icons": [
+  {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+  {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+  {"src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"},
+  {"src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any"}
+ ]
+}

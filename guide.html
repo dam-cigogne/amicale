@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Amicale · guide du bureau</title>
+<meta name="description" content="Guide pas à pas de l’appli Amicale : rejoindre le groupe, inscrire et faire signer un amicaliste, archiver les bulletins, tâches et courses, organiser la soirée de Noël, notes de réunion.">
+<meta name="theme-color" content="#7c3aed">
+<link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+<style>
+:root{--bg:#f7f4ec;--surface:#fffdf7;--text:#25211a;--muted:#6b6355;--line:#e3dbc9;--ac:#7c3aed;--ac2:#ede9fe;--ok:#15803d;--warn:#b45309}
+@media(prefers-color-scheme:dark){:root{--bg:#15131a;--surface:#1f1c26;--text:#eeeaf5;--muted:#a59fb3;--line:#353042;--ac:#a78bfa;--ac2:#2a2140;--ok:#4ade80;--warn:#fbbf24}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:17px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+.wrap{max-width:980px;margin:0 auto;padding:0 16px 4rem}
+header{background:linear-gradient(135deg,#6d28d9,#a855f7);color:#fff;padding:2.2rem 16px 2rem}
+header .wrap{padding-bottom:0}
+header h1{font:italic 700 2.1rem/1.15 "New York",ui-serif,Georgia,serif;margin:.2rem 0 .5rem}
+header p{margin:.3rem 0;max-width:42rem;opacity:.95}
+.btns{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem}
+.btn{display:inline-block;background:#fff;color:#5b21b6;font-weight:800;text-decoration:none;padding:.6rem 1rem;border-radius:.8rem}
+.btn.alt{background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.5)}
+nav.toc{background:var(--surface);border:1px solid var(--line);border-radius:1rem;padding:.8rem 1rem;margin:1.2rem 0}
+nav.toc b{display:block;margin-bottom:.3rem}
+nav.toc ol{margin:0;padding-left:1.3rem}nav.toc a{color:var(--ac);text-decoration:none;font-weight:650}
+section{margin:2.4rem 0 0}
+h2{font:italic 700 1.6rem/1.2 "New York",ui-serif,Georgia,serif;margin:0 0 .4rem;display:flex;gap:.5rem;align-items:baseline}
+h2 .n{font-style:normal;background:var(--ac);color:#fff;border-radius:.6rem;font-size:1rem;padding:.1rem .55rem;font-family:inherit}
+h3{font-size:1.1rem;margin:1.4rem 0 .3rem}
+.lead{color:var(--muted);margin:.2rem 0 1rem}
+.who{display:inline-block;font-size:.8rem;font-weight:800;border-radius:.5rem;padding:.05rem .45rem;background:var(--ac2);color:var(--ac);margin-left:.2rem;vertical-align:middle}
+.step{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:1.2rem;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:1.1rem;padding:1rem;margin:.8rem 0}
+.step.rev{grid-template-columns:260px minmax(0,1fr)}.step.rev .txt{order:2}
+.step ol,.step ul{margin:.3rem 0;padding-left:1.25rem}.step li{margin:.25rem 0}
+.step img{width:100%;height:auto;border-radius:1rem;border:1px solid var(--line);box-shadow:0 6px 20px rgba(0,0,0,.08);display:block}
+.step figure{margin:0}.step figcaption{font-size:.8rem;color:var(--muted);text-align:center;margin-top:.3rem}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+.step:has(.pair){grid-template-columns:minmax(0,1fr) 440px}.step.rev:has(.pair){grid-template-columns:440px minmax(0,1fr)}
+.tip{background:var(--ac2);border-radius:.8rem;padding:.6rem .8rem;margin:.6rem 0;font-size:.95rem}
+.tip.w{background:rgba(245,158,11,.14)}
+kbd{font:inherit;font-weight:750;background:var(--ac2);color:var(--ac);border-radius:.4rem;padding:0 .3rem;white-space:nowrap}
+table{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--line);border-radius:1rem;overflow:hidden;font-size:.95rem}
+td,th{padding:.5rem .7rem;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{background:var(--ac2)}
+footer{margin-top:3rem;color:var(--muted);font-size:.85rem;text-align:center}
+@media(max-width:720px){.step:has(.pair),.step.rev:has(.pair){grid-template-columns:1fr}table{font-size:.82rem}td,th{padding:.4rem .35rem}th{hyphens:auto;word-break:break-word}.step,.step.rev{grid-template-columns:1fr}.step.rev .txt{order:0}.step figure{max-width:300px;margin:0 auto}.pair{max-width:420px;margin:0 auto}header h1{font-size:1.7rem}}
+@media print{header{background:#6d28d9!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.step{break-inside:avoid}.btns{display:none}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<div style="font-weight:800;letter-spacing:.06em;font-size:.8rem;opacity:.85">GUIDE DU BUREAU · APPLI AMICALE</div>
+<h1>Amicale, pas à pas</h1>
+<p>Six cas concrets, avec les vrais écrans de l’appli : rejoindre le groupe, inscrire un amicaliste et le faire signer, archiver les bulletins, se répartir les tâches et les courses, organiser la soirée de Noël de A à Z, garder le bilan d’une réunion.</p>
+<p style="font-size:.9rem;opacity:.85">Tous les noms sont des exemples. Tu peux tout essayer sans risque dans la démo : rien n’y est enregistré.</p>
+<div class="btns"><a class="btn" href="visite.html" style="background:#facc15;color:#3b0764">▶ Visite guidée (plein écran)</a><a class="btn" href="./">Ouvrir l’appli Amicale</a><a class="btn alt" href="./?demo=1">Essayer la démo</a></div>
+</div></header>
+<div class="wrap">
+
+<nav class="toc"><b>Sommaire</b><ol start="0">
+<li><a href="#installer">Installer l’appli (1 minute)</a></li>
+<li><a href="#rejoindre">Recevoir l’invitation et créer sa fiche</a></li>
+<li><a href="#amicaliste">Inscrire un amicaliste et le faire signer</a></li>
+<li><a href="#archiver">Archiver les bulletins en PDF</a></li>
+<li><a href="#taches">Tâches et courses : qui fait quoi</a></li>
+<li><a href="#noel">La soirée de Noël de A à Z (et le Jour J)</a></li>
+<li><a href="#note">Le bilan de la réunion</a></li>
+<li><a href="#droits">Qui voit quoi ? Bureau et aides</a></li>
+</ol></nav>
+
+<section id="installer">
+<h2><span class="n">0</span> Installer l’appli</h2>
+<p class="lead">Amicale est une appli web : rien à télécharger dans un magasin d’applis, pas de compte, pas de publicité.</p>
+<div class="step"><div class="txt">
+<h3>Sur iPhone / iPad</h3>
+<ol><li>Ouvre le lien reçu par SMS dans <b>Safari</b>.</li><li>Touche le bouton <kbd>Partager</kbd> (carré avec une flèche).</li><li>Choisis <kbd>Sur l’écran d’accueil</kbd>, puis <kbd>Ajouter</kbd>.</li><li>Ouvre ensuite toujours Amicale <b>depuis l’icône violette</b> de l’écran d’accueil.</li></ol>
+<h3>Sur Android</h3>
+<ol><li>Ouvre le lien dans <b>Chrome</b>.</li><li>Menu <kbd>⋮</kbd> → <kbd>Installer l’application</kbd> (ou « Ajouter à l’écran d’accueil »).</li></ol>
+<div class="tip">Tu utilises déjà <b>AgenDam</b> ? Le groupe y est aussi, dans l’onglet du groupe : les deux applis montrent exactement les mêmes informations.</div>
+</div><figure><img src="guide/g03-accueil.jpg" alt="Écran d’accueil de l’appli Amicale" loading="lazy"><figcaption>Premier lancement</figcaption></figure></div>
+</section>
+
+<section id="rejoindre">
+<h2><span class="n">1</span> Recevoir l’invitation et créer sa fiche</h2>
+<p class="lead">Exemple : Paul Durand, président (administrateur), invite Claire Moreau au bureau.</p>
+<div class="step"><div class="txt">
+<h3>Paul invite <span class="who">administrateur</span></h3>
+<ol><li>Onglet <kbd>Membres</kbd> → <kbd>+ Inviter quelqu’un</kbd>.</li><li>Il choisit le niveau : <b>Bureau</b> (voit tout) ou <b>Aide extérieur</b> (voit seulement ce qui est partagé avec les aides).</li><li>L’appli crée un <b>code à 8 caractères</b>, valable 7 jours, pour une seule personne.</li><li><kbd>Envoyer par SMS</kbd> : le message contient le lien de l’appli et le code.</li></ol>
+</div><div class="pair"><figure><img src="guide/g01-inviter.jpg" alt="Choisir le niveau d’accès" loading="lazy"><figcaption>Choisir le niveau</figcaption></figure><figure><img src="guide/g02-code.jpg" alt="Le code d’invitation" loading="lazy"><figcaption>Le code à envoyer</figcaption></figure></div></div>
+<div class="step rev"><div class="txt">
+<h3>Claire reçoit le SMS <span class="who">nouveau membre</span></h3>
+<ol><li>Elle installe Amicale avec le lien (voir étape 0).</li><li>Elle touche <kbd>🔢 Rejoindre avec un code</kbd> et tape le code (ou colle tout le SMS : l’appli trouve le code toute seule).</li><li>Elle remplit <b>sa fiche</b> : prénom et nom tels qu’ils apparaîtront, téléphone, mail perso, mail de travail. Tout est facultatif sauf le nom.</li><li><kbd>Rejoindre</kbd> : c’est fini.</li></ol>
+<div class="tip">Sa fiche n’est visible que par les membres de son niveau et au-dessus. Les échanges du groupe sont <b>chiffrés</b> : le serveur ne garde que des données illisibles.</div>
+</div><div class="pair"><figure><img src="guide/g04-saisie-code.jpg" alt="Taper le code" loading="lazy"><figcaption>Taper le code</figcaption></figure><figure><img src="guide/g05-fiche.jpg" alt="Remplir sa fiche" loading="lazy"><figcaption>Remplir sa fiche</figcaption></figure></div></div>
+<div class="step"><div class="txt">
+<h3>Paul voit Claire arriver</h3>
+<ul><li>Claire apparaît dans <kbd>Membres</kbd>, rubrique Bureau.</li><li>Paul touche sa fiche pour lui <b>donner un titre</b> (secrétaire, trésorière…), l’appeler, lui envoyer un SMS ou un mail.</li><li>Il peut aussi la <b>passer en Aide</b>, ou la <b>retirer</b> : les clés du groupe sont alors renouvelées, elle ne reçoit plus rien.</li></ul>
+</div><figure><img src="guide/g06-membres.jpg" alt="Liste des membres" loading="lazy"><figcaption>Onglet Membres</figcaption></figure></div>
+</section>
+
+<section id="amicaliste">
+<h2><span class="n">2</span> Inscrire un amicaliste et le faire signer</h2>
+<p class="lead">Exemple : Claire inscrit Jean Dupont, sergent, qui paie 20 € par carte bancaire et signe son bulletin au doigt sur le téléphone. <span class="who">bureau seulement</span></p>
+<div class="step"><div class="txt">
+<h3>La fiche de l’amicaliste</h3>
+<ol><li>Onglet <kbd>Amicalistes</kbd> → <kbd>+ Ajouter un amicaliste</kbd>.</li><li>Nom et prénom (en MAJUSCULES pour le nom, c’est plus lisible), grade, catégorie (actif, honneur, bienfaiteur, ancien), date d’adhésion, cotisation, patch reçu, <b>régime particulier</b> (halal, végétarien, allergie…), notes.</li><li>En bas, <b>Action</b> : <kbd>📝 Bulletin d’adhésion : faire signer</kbd>, puis <kbd>Ajouter</kbd>.</li></ol>
+<div class="tip">Une liste existe déjà sur Excel ou Word ? <kbd>📥 Importer une liste</kbd> : les colonnes (nom, grade, téléphone…) sont reconnues toutes seules et les doublons ignorés.</div>
+</div><figure><img src="guide/g07-ajout-amicaliste.jpg" alt="Nouvel amicaliste" loading="lazy"><figcaption>Nouvel amicaliste</figcaption></figure></div>
+<div class="step rev"><div class="txt">
+<h3>La signature au doigt</h3>
+<ol><li>Le bulletin s’affiche déjà rempli : nom, grade, nom de l’amicale, année, engagements, mention sur les données personnelles.</li><li>Le <b>prix se calcule tout seul</b> d’après le grade (tarifs réglés une fois par l’administrateur, voir l’encadré).</li><li>Choisis le règlement : carte bancaire, espèces, chèque ou virement.</li><li>Tends le téléphone : l’amicaliste <b>signe au doigt</b> dans le cadre (<kbd>Effacer la signature</kbd> pour recommencer).</li><li><kbd>✓ Valider et créer le PDF</kbd>.</li></ol>
+<div class="tip"><b>Modèle et tarifs</b> : l’administrateur les règle une seule fois (onglet <kbd>Groupe</kbd> → Bulletin d’adhésion : texte, tarifs par grade, ou import de son propre modèle Word). Tous les téléphones du bureau les reçoivent automatiquement.</div>
+</div><figure><img src="guide/g08-signature.jpg" alt="Bulletin à signer au doigt" loading="lazy"><figcaption>Le bulletin signé au doigt</figcaption></figure></div>
+<div class="step"><div class="txt">
+<h3>Le résultat</h3>
+<ul><li>Sous le nom : <b>« cotisation ✓ 20 € (CB) · 📝 bulletin ✓ · ✍️ inscrit par Claire Moreau »</b>.</li><li>La cotisation est cochée toute seule, le PDF du bulletin est prêt (fiche → <kbd>📄 Rouvrir le bulletin</kbd>).</li><li>Le bulletin arrive chez tout le bureau, pas chez les aides.</li></ul>
+</div><figure><img src="guide/g09-amicaliste-signe.jpg" alt="Amicaliste inscrit avec bulletin" loading="lazy"><figcaption>« inscrit par Claire Moreau »</figcaption></figure></div>
+</section>
+
+<section id="archiver">
+<h2><span class="n">3</span> Archiver les bulletins en PDF</h2>
+<p class="lead">Une fois par an (ou quand tu veux), l’administrateur range tous les bulletins signés dans un seul fichier, puis libère la place dans l’appli. <span class="who">administrateur</span></p>
+<div class="step"><div class="txt">
+<ol><li>Onglet <kbd>Amicalistes</kbd> → <kbd>🗄 Archiver les bulletins signés</kbd> (le nombre est indiqué).</li><li><kbd>Créer le ZIP</kbd> : un PDF par personne, nommé <b>NOM-Prénom</b>, dans un seul fichier « bulletins-AAAA-MM-JJ.zip ». Sur iPhone, choisis <kbd>Enregistrer dans Fichiers</kbd> (iCloud Drive…).</li><li>Une fois le ZIP bien rangé : <kbd>Oui, libérer la place</kbd>. Les signatures sont effacées sur tous les téléphones du bureau.</li><li>La fiche garde la mention <b>« 📝 bulletin archivé »</b>.</li></ol>
+<div class="tip w">Ne libère la place qu’après avoir vérifié que le ZIP est bien enregistré.</div>
+</div><div class="pair"><figure><img src="guide/g11-archiver.jpg" alt="Créer le ZIP" loading="lazy"><figcaption>Créer le ZIP</figcaption></figure><figure><img src="guide/g12-liberer.jpg" alt="Libérer la place" loading="lazy"><figcaption>Libérer la place</figcaption></figure></div></div>
+<div class="step rev"><div class="txt"><h3>Après l’archivage</h3><p>La liste reste complète : chaque amicaliste garde sa fiche, sa cotisation et la mention « bulletin archivé ». Seuls les bulletins signés (les plus lourds) ont quitté l’appli, ils sont dans ton ZIP.</p></div>
+<figure><img src="guide/g13-archive.jpg" alt="Bulletin archivé" loading="lazy"><figcaption>« bulletin archivé »</figcaption></figure></div>
+</section>
+
+<section id="taches">
+<h2><span class="n">4</span> Tâches et courses : qui fait quoi</h2>
+<p class="lead">Chacun voit d’un coup d’œil ce qui reste à faire, par qui, et qui l’a fait.</p>
+<div class="step"><div class="txt">
+<h3>Les tâches</h3>
+<ul><li><kbd>+ Nouvelle tâche</kbd> : quoi, <b>pour qui</b> (👤), pour quand (📅), visible par le bureau seulement (🔒) ou par tout le monde.</li><li>Sous chaque tâche : <b>👤 la personne chargée</b>, la date, et <b>✍️ qui l’a écrite ou modifiée</b>.</li><li>Une tâche faite se coche et passe dans <b>Faites</b> : on voit qui l’a cochée (ex. « ✍️ Claire Moreau » pour les cadeaux de Noël).</li></ul>
+</div><figure><img src="guide/g14-taches.jpg" alt="Tâches du groupe" loading="lazy"><figcaption>Tâches : 👤 qui s’en occupe, ✍️ qui a écrit</figcaption></figure></div>
+<div class="step rev"><div class="txt">
+<h3>Les courses</h3>
+<ul><li>Plusieurs listes : <b>Courses</b>, <b>Buvette</b>, <b>Local</b>… (<kbd>＋ Liste</kbd> pour en créer une).</li><li><b>⭐ Mes habituels</b> : un appui ajoute l’article, un second le retire (boissons, apéro…).</li><li>Les articles sont rangés par rayon, avec la quantité et les boutons <kbd>−</kbd> <kbd>+</kbd>.</li><li>Au magasin, on coche : l’article passe <b>Dans le chariot</b> avec le nom de celui qui l’a pris (« ✅ Luc Martin », « ✅ Hugo Petit »). Personne n’achète deux fois la même chose.</li></ul>
+</div><figure><img src="guide/g15-courses.jpg" alt="Courses de la buvette" loading="lazy"><figcaption>« Dans le chariot · ✅ Luc Martin »</figcaption></figure></div>
+</section>
+
+<section id="noel">
+<h2><span class="n">5</span> La soirée de Noël de A à Z</h2>
+<p class="lead">Exemple complet : repas de Noël le samedi 19 décembre à la salle des fêtes, 20 € par adulte, cadeaux pour les enfants. On prépare, on inscrit, on encaisse, puis le soir même on distribue avec la page Jour J.</p>
+
+<div class="step"><div class="txt">
+<h3>1. Créer l’événement</h3>
+<ol><li>Onglet <kbd>Événements</kbd> → <kbd>+ Nouvel événement</kbd>.</li><li>Titre « Soirée de Noël », date, lieu, description, et <b>visible par</b> : bureau seulement ou aussi les aides.</li><li>Type : <b>Repas</b> (avec tickets à distribuer) ou autre (arrivées, cadeaux…).</li></ol>
+<p>L’événement apparaît dans la liste de l’année, avec l’avancement de la préparation (✅ 3/7).</p>
+</div><figure><img src="guide/g16-evenements.jpg" alt="Liste des événements" loading="lazy"><figcaption>Les événements de l’année</figcaption></figure></div>
+
+<div class="step rev"><div class="txt">
+<h3>2. La préparation : qui fait quoi</h3>
+<ul><li>Une liste à cocher : réserver la salle, choisir le traiteur, acheter les cadeaux, trouver le Père Noël, décorer…</li><li>Chaque ligne a son responsable (👤). Quand c’est fait : <b>« ✅ fait par Luc Martin »</b> et l’heure.</li><li><kbd>📥 Importer une liste</kbd> : colle une liste depuis Word, Notes ou un mail (une ligne par tâche), ou choisis un fichier Excel/Word. Les colonnes Heure, Tâche et Responsable sont reconnues toutes seules.</li></ul>
+</div><div class="pair"><figure><img src="guide/g17-noel-preparation.jpg" alt="Préparation de la soirée" loading="lazy"><figcaption>« fait par … »</figcaption></figure><figure><img src="guide/g18-import-liste.jpg" alt="Importer une liste" loading="lazy"><figcaption>Importer une liste</figcaption></figure></div></div>
+
+<div class="step"><div class="txt">
+<h3>3. Les inscrits et l’argent</h3>
+<ul><li>Deux groupes triés tout seuls : <b>amicalistes</b> (reconnus d’après ta liste) et <b>non-amicalistes</b> (invités, familles).</li><li>Ajouter des inscrits : <kbd>🎖 Ajouter des amicalistes</kbd> (on coche dans la liste), <kbd>📥 Importer une liste d’inscrits</kbd> (Excel, Word, texte collé) ou <kbd>✍️ Ajouter des noms</kbd> à la main.</li><li>Pour chacun : nombre de repas et de boissons (<kbd>−</kbd> <kbd>+</kbd>, 2 pour un couple), montant payé et règlement.</li><li>En haut, les totaux : tickets, encaissé (dont CB, espèces, chèques, virements) et les <b>régimes particuliers</b> en orange (Halal 2, Végétarien 2, Allergie 2) pour prévenir le traiteur.</li></ul>
+</div><div class="pair"><figure><img src="guide/g19-noel-inscrits.jpg" alt="Inscrits et totaux" loading="lazy"><figcaption>Inscrits, encaissé, régimes</figcaption></figure><figure><img src="guide/g22-import-inscrits.jpg" alt="Ajouter des noms" loading="lazy"><figcaption>Coller une liste de noms</figcaption></figure></div></div>
+
+<div class="step rev"><div class="txt">
+<h3>4. Ce qu’on distribue : repas, boisson, cadeau…</h3>
+<ul><li><kbd>⚙️ Ce qu’on distribue</kbd> : choisis les rubriques de la soirée. Pour Noël : <b>✅ Arrivé</b>, <b>🍽 Repas</b>, <b>🍷 Boisson</b>, <b>🎁 Cadeau</b>. Tu peux en inventer (« Ticket tombola », « Entrée »…) et changer plus tard.</li><li><kbd>+1 cadeau pour tous</kbd> : chaque inscrit reçoit 1 dans la rubrique, puis on ajuste (une famille avec 3 enfants = 3 cadeaux).</li><li><kbd>📤 Exporter (Excel)</kbd> : la liste complète pour le traiteur ou le trésorier, avec les régimes.</li></ul>
+</div><div class="pair"><figure><img src="guide/g21-ce-qu-on-distribue.jpg" alt="Choisir ce qu’on distribue" loading="lazy"><figcaption>Choisir les rubriques</figcaption></figure><figure><img src="guide/g20-noel-distribution.jpg" alt="Boutons de distribution" loading="lazy"><figcaption>« +1 pour tous », Jour J, export</figcaption></figure></div></div>
+
+<div class="step"><div class="txt">
+<h3>5. Le programme et l’affiche</h3>
+<ul><li><b>Programme</b> : 18:30 accueil, 19:30 repas, 21:00 Père Noël et cadeaux, 22:00 dessert et soirée dansante… (<kbd>Ajouter un créneau</kbd>).</li><li><kbd>🖨 Imprimer · affiche · PDF</kbd> → <kbd>🖼 Affiche à placarder</kbd> : l’appli choisit un style « Noël » tout seul. Tu changes le style, les couleurs, les textes, tu ajoutes un logo ou une photo, tu déplaces et agrandis tout au doigt.</li><li>L’affiche est <b>partagée avec le groupe</b> : les autres la retrouvent telle quelle.</li><li>On imprime aussi le programme seul, la liste de préparation ou la fiche complète.</li></ul>
+</div><div class="pair"><figure><img src="guide/g23-noel-programme.jpg" alt="Programme de la soirée" loading="lazy"><figcaption>Le programme</figcaption></figure><figure><img src="guide/g25-affiche.jpg" alt="Affiche de la soirée de Noël" loading="lazy"><figcaption>L’affiche, prête à imprimer</figcaption></figure></div></div>
+
+<div class="step rev"><div class="txt">
+<h3>6. L’événement est dans l’agenda</h3>
+<p>Rien à recopier : la soirée apparaît toute seule dans l’onglet <kbd>Agenda</kbd> du groupe, vue <b>Mois</b>, le samedi 19 décembre (trait de couleur sous la date). Touche le jour pour voir le détail et ouvrir l’événement.</p>
+</div><figure><img src="guide/g26-agenda-noel.jpg" alt="Agenda du groupe en décembre" loading="lazy"><figcaption>Samedi 19 décembre dans l’agenda</figcaption></figure></div>
+
+<div class="step"><div class="txt">
+<h3>7. Le soir même : la page Jour J</h3>
+<ol><li><kbd>🎟 Page Jour J (distribution)</kbd>, sur un ou plusieurs téléphones en même temps (accueil, bar, Père Noël…).</li><li>Cherche un nom, ou filtre par grade ou par régime. Onglets <b>Amicalistes</b>, <b>Non-amicalistes</b>, <b>Terminés</b>.</li><li>Un appui par ticket remis : <b>« Arrivé 1/2, 2/2 »</b> pour un couple, « Repas 1/2 », « Cadeau »… Ce qui est remis devient violet.</li><li>Quand tout est remis, la personne passe dans <b>Terminés</b>. En haut, il reste toujours combien de repas, boissons, cadeaux à donner.</li></ol>
+<div class="tip">Exemple : la famille Renaud est arrivée à 2 sur 4 : elle reste dans la liste tant que les 2 autres ne sont pas là, et ses 2 cadeaux attendent le Père Noël.</div>
+</div><figure><img src="guide/g24-jour-j.jpg" alt="Page Jour J" loading="lazy"><figcaption>Jour J : un appui par ticket</figcaption></figure></div>
+<p style="margin-top:.6rem"><b>Et l’an prochain ?</b> <kbd>📋 Copier pour l’an prochain</kbd> : même événement, un an plus tard, préparation décochée.</p>
+</section>
+
+<section id="note">
+<h2><span class="n">6</span> Le bilan de la réunion</h2>
+<p class="lead">Le secrétaire écrit le compte rendu pendant ou après la réunion ; tout le bureau le retrouve. <span class="who">bureau seulement</span></p>
+<div class="step"><div class="txt">
+<ol><li>Onglet <kbd>Notes</kbd> → <kbd>+ Nouvelle note</kbd>.</li><li>Écris simplement : une ligne qui commence par <b>#</b> devient un titre, une ligne qui commence par <b>-</b> devient une puce.</li><li>Exemple : <b># Présents</b>, <b># Décisions</b> (date de la soirée, prix, budget des cadeaux), <b># À faire</b> (Luc : la salle, Anne : le traiteur…), <b># Prochaine réunion</b>.</li><li>La note s’affiche en pleine page, propre, avec l’auteur et la date. Elle s’imprime, se partage par mail ou par message.</li></ol>
+<div class="tip">Les décisions « À faire » peuvent devenir des tâches avec un responsable (étape 4) : tout le monde les voit, et on sait qui a fini.</div>
+</div><figure><img src="guide/g27-note-bilan.jpg" alt="Note bilan de réunion" loading="lazy"><figcaption>« Bilan de la réunion du bureau »</figcaption></figure></div>
+</section>
+
+<section id="droits">
+<h2><span class="n">7</span> Qui voit quoi ?</h2>
+<table>
+<tr><th></th><th>Admin.</th><th>Bureau</th><th>Aide</th></tr>
+<tr><td>Membres, agenda, tâches, courses, événements partagés avec les aides</td><td>✅</td><td>✅</td><td>✅</td></tr>
+<tr><td>Notes, amicalistes, bulletins, éléments « bureau seulement »</td><td>✅</td><td>✅</td><td>—</td></tr>
+<tr><td>Inviter, donner des titres, passer en aide, retirer quelqu’un</td><td>✅</td><td>inviter des aides</td><td>—</td></tr>
+<tr><td>Modèle de bulletin et tarifs, archivage des bulletins</td><td>✅</td><td>lit le modèle</td><td>—</td></tr>
+</table>
+<div class="tip" style="margin-top:.8rem"><b>Sécurité</b> : tout ce qui passe par le serveur est chiffré ; seuls les membres du groupe ont la clé. Une personne retirée ne reçoit plus rien (les clés sont renouvelées). Pas de compte, pas de publicité, aucune donnée revendue.</div>
+<div class="tip w"><b>À savoir</b> : pour l’instant, l’appli ne prévient pas quand elle est fermée (pas encore de notifications) : ouvre-la pour voir les nouveautés, elle se met à jour toute seule.</div>
+</section>
+
+<footer>Amicale · fait avec AgenDam · gratuit, sans publicité · <a href="./" style="color:var(--ac)">Ouvrir l’appli</a></footer>
+</div>
+</body>
+</html>
