@@ -120,7 +120,7 @@ const C=[
   ['g32-lier','lier','📲 Plusieurs appareils','Chacun peut avoir l’appli sur son téléphone, son iPad et son PC : ⚙ › « Lier un autre appareil ». C’est toi, mêmes droits. Dans AgenDam, le même code relie aussi ton agenda perso.'],
   ['g33-lier-code','dlg','Le code de liaison','Sur l’autre appareil : ouvre Amicale › « Rejoindre avec un code », tape ce code. Tout se synchronise tout seul. Code personnel, 15 minutes : ne le donne à personne.']]},
  {em:'🎖',t:'Les amicalistes',p:'La liste des adhérents : importer votre fichier, inscrire, faire signer le bulletin d’adhésion, retrouver les numéros de badge.',s:[
-  ['a17-am-outils','imp','📥 Votre fichier Excel','Importé tel quel : grades abrégés (SGC, ADC…), badge, paiement, « 29/07 DAMIEN », patch OK. Réimporter met à jour, sans doublon.'],
+  ['a17-am-outils','imp','📥 Importer des listes d’amicalistes','On peut importer des listes d’amicalistes (Excel, Word, texte). Exemple avec un fichier Excel, importé tel quel : grades abrégés (SGC, ADC…), badge, paiement, « 29/07 DAMIEN », patch OK. Réimporter met à jour, sans doublon.'],
   ['a17-am-outils','dbl','🧹 Retirer les doublons','Deux fiches pour la même personne ? Une seule est gardée, avec toutes les infos.'],
   ['g07-ajout-amicaliste','nom','Nouvel amicaliste','Onglet <span class="k">Amicalistes</span> › <span class="k">+ Ajouter</span>. Nom en MAJUSCULES, c’est plus lisible.'],
   ['g07-ajout-amicaliste','grade','Grade, catégorie…','Grade, catégorie, adhésion, cotisation, patch… et en bas « faire signer le bulletin d’adhésion ».'],
@@ -283,10 +283,10 @@ const take=(img,mk)=>{const r=fs(img,mk);if(r)return r[0].s.splice(r[1],1)[0];co
 const after=(list,img,mk)=>{const r=fs(img,mk);if(r)r[0].s.splice(r[1]+1,0,...list.filter(Boolean))};
 after([take('e3-jourj-encaisser','euro'),take('e3-jourj-encaisser','cpt')],'g24-jour-j','p1');
 take('e5-journal','clr');
-take('a9-bulletin','pn');take('a9-bulletin','sv');take('a9b-bulletin-signe','sig');
+take('a11-papier','bp');take('n3-outils','imp');take('a9-bulletin','pn');take('a9-bulletin','sv');take('a9b-bulletin-signe','sig');
 after([['a9-bulletin','pn'],['a9-bulletin','sv'],['a9b-bulletin-signe','pv'],['a9b-bulletin-signe','sig'],['p5-bulletin','*'],['a10-menu','send'],['a11-papier','bp']].map(k=>take(k[0],k[1])),'g09-amicaliste-signe','fiche');
-after([take('n3-outils','imp'),take('n2-non-amicalistes','sel')],'n2-non-amicalistes','liste');
-const OR=['Nouvel amicaliste','Grade, catégorie…','Dans la fiche','📞 Téléphone et ✉️ mail','Régime particulier','Inscrire un amicaliste : le faire signer','Service','Il signe au doigt ✍️','Le prix se calcule tout seul','Le règlement','👁 Le montrer avant','Signature au doigt ✍️','Valider','📄 Le bulletin d’adhésion signé','Et voilà !','Et ensuite ?','Déjà signé sur papier ?','📥 Votre fichier Excel','🧹 Retirer les doublons'];
+{const sl=take('n2-non-amicalistes','sel'),ch0=C.find(c=>!Array.isArray(c)&&c.t==='Les amicalistes'),chn=C.find(c=>!Array.isArray(c)&&c.t==='Amicalistes et non-amicalistes');if(ch0){if(chn){ch0.s.push(...(chn.s||[]));C.splice(C.indexOf(chn),1)}if(sl)ch0.s.push(sl)}}
+const OR=['Nouvel amicaliste','Grade, catégorie…','Dans la fiche','📞 Téléphone et ✉️ mail','Régime particulier','Inscrire un amicaliste : le faire signer','Service','Il signe au doigt ✍️','Le prix se calcule tout seul','Le règlement','👁 Le montrer avant','Signature au doigt ✍️','Valider','📄 Le bulletin d’adhésion signé','Et voilà !','Et ensuite ?','Déjà signé sur papier ?','📥 Importer des listes d’amicalistes','🧹 Retirer les doublons','Deux listes','Ajouter un non-amicaliste','Passer de l’un à l’autre','☑ Sélectionner'];
 {const ch=C.find(c=>!Array.isArray(c)&&c.t==='Les amicalistes');if(ch&&ch.s){const rk=(s,i)=>{const j=OR.indexOf(s[2]);return j>=0?j:100+i};ch.s=ch.s.map((s,i)=>[rk(s,i),s]).sort((a,b)=>a[0]-b[0]).map(x=>x[1])}}
 const k=C.findIndex(c=>!Array.isArray(c)&&c.t&&c.t.indexOf('Installe l')===0);if(k>=0)C.push(C.splice(k,1)[0])})();
 const Q=[];C.forEach((c,ci)=>{Q.push({card:c,ci});(c.s||[]).forEach(s=>Q.push({ci,img:s[0],mk:s[1],t:s[2],p:s[3]}))});Q.push({card:FIN,fin:1,ci:C.length});
