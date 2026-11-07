@@ -29,7 +29,7 @@ body.paperon:not(.crop) #scr{border-radius:.3rem}
 #hole{position:absolute;border-radius:.8rem;box-shadow:0 0 0 9999px rgba(20,8,40,.55);transition:all .45s cubic-bezier(.3,1.3,.5,1);pointer-events:none}
 #hole:after{content:"";position:absolute;inset:-6px;border:3px solid var(--y);border-radius:1rem;animation:pu 1.4s ease-out infinite}
 @keyframes pu{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.12)}}
-#bub{position:fixed;z-index:15;width:min(330px,92%);background:#fff;border-radius:1.1rem;padding:.8rem .9rem .7rem;box-shadow:0 14px 40px rgba(0,0,0,.35);transition:all .45s cubic-bezier(.3,1.3,.5,1);animation:pop .4s cubic-bezier(.3,1.5,.5,1)}
+#bub{position:fixed;z-index:15;-webkit-backface-visibility:hidden;backface-visibility:hidden;-webkit-transform:translateZ(0);isolation:isolate;width:min(330px,92%);background:#fff;border-radius:1.1rem;padding:.8rem .9rem .7rem;box-shadow:0 14px 40px rgba(0,0,0,.35);transition:all .45s cubic-bezier(.3,1.3,.5,1);animation:pop .4s cubic-bezier(.3,1.5,.5,1)}
 @keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
 #bub:before{content:"";position:absolute;left:var(--tx,50%);width:16px;height:16px;background:#fff;transform:translateX(-50%) rotate(45deg)}
 #bub.dn:before{top:-7px}#bub.up:before{bottom:-7px}
@@ -122,14 +122,14 @@ const C=[
   ['a17-am-outils','dbl','🧹 Retirer les doublons','Deux fiches pour la même personne ? Une seule est gardée, avec toutes les infos.'],
   ['g07-ajout-amicaliste','nom','Nouvel amicaliste','Onglet <span class="k">Amicalistes</span> › <span class="k">+ Ajouter</span>. Nom en MAJUSCULES, c’est plus lisible.'],
   ['g07-ajout-amicaliste','grade','Grade, catégorie…','Grade, catégorie, adhésion, cotisation, patch… et en bas « faire signer le bulletin d’adhésion ».'],
+  ['a22-fiche-badge','bg','Dans la fiche','N° de badge, payée le, encaissé par (rempli tout seul quand on encaisse), service, régime.'],
   ['g07-ajout-amicaliste','regime','Régime particulier','Halal, végétarien, allergie : il ressortira en orange dans les repas. 🍽'],
   ['g08-signature','prix','Le prix se calcule tout seul','D’après le grade : les tarifs sont réglés <b>une fois</b> par l’administrateur pour tout le bureau.'],
   ['g08-signature','pm','Le règlement','Carte, espèces, chèque ou virement.'],
   ['g08-signature','sig','Signature au doigt ✍️','On tend le téléphone, il signe. « Effacer » pour recommencer.'],
   ['g08-signature','ok','Valider','Le bulletin d’adhésion est rangé dans la fiche et envoyé au bureau (pas aux aides). Ensuite : envoyer, imprimer ou enregistrer le PDF.'],
   ['g09-amicaliste-signe','fiche','Et voilà !','« cotisation ✓ 20 € (CB) · bulletin d’adhésion ✓ · <b>inscrit par Claire Moreau</b> ». On sait qui a fait quoi.'],
-  ['a22-fiche-badge','bg','Dans la fiche','N° de badge, payée le, encaissé par (rempli tout seul quand on encaisse), service, régime.'],
-  ['a17-am-outils','bg','🪪 Numéros de badge','Tous les amicalistes, cotisation payée, une sélection… ou les inscrits d’un repas.'],
+  ['a17-am-outils','bg','🪪 Numéros de badge','On peut extraire le numéro de badge de <b>tous les amicalistes</b>, de <b>ceux inscrits à un événement</b>, ou de <b>ceux qui ont payé leur cotisation</b>.'],
   ['a18-badges','tab','Le listing','Nom, prénom, grade, N° de badge. En orange : ceux qui n’ont pas de badge.'],
   ['a18-badges','copy','📋 Copier','Les numéros à coller dans la demande de repas. Ou 📊 Excel, ou 🖨 imprimer.'],
   ['a17-am-outils','fill','📋 Compléter une liste Excel','Exemple : pour un repas, les gens s’inscrivent sur un Excel avec seulement NOM et Prénom.'],
@@ -165,7 +165,7 @@ const C=[
   ['a5-evenement-docs','docs','📎 Les documents de la soirée','Permis feu, devis du traiteur, contrat de la salle… joints à l’événement. ✉️ pour les envoyer.'],
   ['a5-evenement-docs','join','Joindre un document','Il est aussi rangé dans 📁 Administratif, dans le dossier de ton choix.'],
   ['g25-affiche','aff','L’affiche 🖼','Style Noël choisi tout seul. Couleurs, textes, logo, photos : tout se déplace au doigt. Elle est partagée avec le groupe. <b>Impression possible</b> 🖨 : on regarde juste après.'],
-  ['g28-impression','af','Imprimer : 4 documents 🖨','Bouton <span class="k">🖨 Imprimer · affiche · PDF</span> : on choisit le document. Sur iPhone et iPad, on obtient un PDF à imprimer ou à envoyer.'],
+  ['g28-impression','af','Imprimer : 4 documents 🖨','On a la possibilité d’imprimer <b>4 documents différents</b>, montrés sur les diapos suivantes : touche le bouton <span class="k">🖨 Imprimer · affiche · PDF</span> et choisis. Sur iPhone et iPad, on obtient un PDF à imprimer ou à envoyer.'],
   ['p1-affiche','*','🖼 L’affiche à placarder','Format A4, en couleurs ou en noir et blanc. Prête à imprimer et à afficher.'],
   ['p2-fiche','*','📄 La fiche complète','Description, programme et liste de préparation avec les responsables : pour la réunion ou le classeur.'],
   ['p3-programme','*','🕐 Le programme seul','À afficher à l’entrée ou à donner aux bénévoles.'],
@@ -223,7 +223,7 @@ C.push({em:'📜',t:'Le bulletin d’adhésion = notre règlement',p:'Chaque ami
   ['a7-reglement','tx','Les articles','On colle le texte. « Article … » est souligné, « - » fait une puce, « [page] » passe à la page 2.'],
   ['a8-bureau','bu','Les membres du bureau','Rôle, nom, ligne et place (gauche, milieu, droite) : comme sur le papier.'],
   ['a8-bureau','sig','Leur signature','Chacun signe au doigt, ou on prend sa signature en photo. Elle apparaît sur tous les bulletins d’adhésion.'],
-  ['a9-bulletin','pn','Faire signer','Fiche de l’amicaliste › Bulletin d’adhésion. Prénom, NOM, grade…'],
+  ['a9-bulletin','pn','Inscrire un amicaliste : le faire signer','Le modèle est déjà réglé (diapos précédentes). Maintenant on inscrit quelqu’un : fiche de l’amicaliste › Bulletin d’adhésion. Prénom, NOM, grade…'],
   ['a9-bulletin','sv','Service','La case du bas du papier : Grade, Prénom, Nom, Service.'],
   ['a9b-bulletin-signe','pv','👁 Le montrer avant','« Voir le bulletin d’adhésion avant de signer » : la personne lit tout le règlement.'],
   ['a9b-bulletin-signe','sig','Il signe au doigt ✍️','Puis « ✓ Valider le bulletin ».'],
