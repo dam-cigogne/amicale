@@ -42,7 +42,7 @@ kbd{font:inherit;font-weight:750;background:var(--ac2);color:var(--ac);border-ra
 table{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--line);border-radius:1rem;overflow:hidden;font-size:.95rem}
 td,th{padding:.5rem .7rem;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{background:var(--ac2)}
 footer{margin-top:3rem;color:var(--muted);font-size:.85rem;text-align:center}
-@media(max-width:720px){.step:has(.pair),.step.rev:has(.pair){grid-template-columns:1fr}table{font-size:.82rem}td,th{padding:.4rem .35rem}th{hyphens:auto;word-break:break-word}.step,.step.rev{grid-template-columns:1fr}.step.rev .txt{order:0}.step figure{max-width:300px;margin:0 auto}.pair{max-width:420px;margin:0 auto}header h1{font-size:1.7rem}}
+@media(max-width:720px){.step:has(.pair),.step.rev:has(.pair){grid-template-columns:1fr}table{font-size:.82rem}td,th{padding:.4rem .35rem}th{white-space:nowrap;hyphens:none;word-break:normal;font-size:.78rem}td:not(:first-child),th:not(:first-child){text-align:center;font-size:.75rem;width:4.2rem}.step,.step.rev{grid-template-columns:1fr}.step.rev .txt{order:0}.step figure{max-width:300px;margin:0 auto}.pair{max-width:420px;margin:0 auto}header h1{font-size:1.7rem}}
 @media print{header{background:#6d28d9!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.step{break-inside:avoid}.btns{display:none}}
 </style>
 </head>
@@ -201,11 +201,11 @@ footer{margin-top:3rem;color:var(--muted);font-size:.85rem;text-align:center}
 <section id="droits">
 <h2><span class="n">7</span> Qui voit quoi ?</h2>
 <table>
-<tr><th></th><th>Admin.</th><th>Bureau</th><th>Aide</th></tr>
+<tr><th></th><th>Admin</th><th>Bureau</th><th>Aide</th></tr>
 <tr><td>Membres, agenda, tâches, courses, événements partagés avec les aides</td><td>✅</td><td>✅</td><td>✅</td></tr>
 <tr><td>Notes, amicalistes, bulletins d’adhésion, éléments « bureau seulement »</td><td>✅</td><td>✅</td><td>—</td></tr>
-<tr><td>Inviter, donner des titres, passer en aide, retirer quelqu’un</td><td>✅</td><td>inviter des aides</td><td>—</td></tr>
-<tr><td>Modèle de bulletin d’adhésion et tarifs, archivage des bulletins</td><td>✅</td><td>lit le modèle</td><td>—</td></tr>
+<tr><td>Inviter, donner des titres, passer en aide, retirer quelqu’un</td><td>✅</td><td>invite les aides</td><td>—</td></tr>
+<tr><td>Modèle de bulletin d’adhésion et tarifs, archivage des bulletins</td><td>✅</td><td>lecture seule</td><td>—</td></tr>
 </table>
 <div class="tip" style="margin-top:.8rem"><b>Sécurité</b> : tout ce qui passe par le serveur est chiffré ; seuls les membres du groupe ont la clé. Une personne retirée ne reçoit plus rien (les clés sont renouvelées). Pas de compte, pas de publicité, aucune donnée revendue.</div>
 <div class="tip w"><b>À savoir</b> : pour l’instant, l’appli ne prévient pas quand elle est fermée (pas encore de notifications) : ouvre-la pour voir les nouveautés, elle se met à jour toute seule.</div>
