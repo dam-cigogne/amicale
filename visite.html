@@ -277,6 +277,15 @@ C.push({em:'📖',t:'Amicale pour les nuls',p:'Les règles de base d’une amica
   ['l3-script','btn','Et si la loi change ?','Pour être sûr que rien n’a changé : on touche ce bouton, on reçoit un script à coller dans une IA. <b>Les sources officielles sont dedans.</b>']]});
 const FIN={em:'🎉',t:'Bravo, tu sais tout !',p:'Essaie toi-même dans la démo : rien n’y est enregistré.'};
 // suite linéaire : carte de chapitre puis ses étapes
+/* ordre des diapos : corrections du 07/11 */
+(function(){const fs=(img,mk)=>{for(const c of C){if(Array.isArray(c)||!c.s)continue;const i=c.s.findIndex(x=>x[0]===img&&x[1]===mk);if(i>=0)return[c,i]}return null};
+const take=(img,mk)=>{const r=fs(img,mk);if(r)return r[0].s.splice(r[1],1)[0];const i=C.findIndex(x=>Array.isArray(x)&&x[0]===img&&x[1]===mk);return i>=0?C.splice(i,1)[0]:null};
+const after=(list,img,mk)=>{const r=fs(img,mk);if(r)r[0].s.splice(r[1]+1,0,...list.filter(Boolean))};
+after([take('e3-jourj-encaisser','euro'),take('e3-jourj-encaisser','cpt')],'g24-jour-j','p1');
+take('e5-journal','clr');
+after([['a9-bulletin','pn'],['a9-bulletin','sv'],['a9b-bulletin-signe','pv'],['a9b-bulletin-signe','sig'],['p5-bulletin','*'],['a10-menu','send'],['a11-papier','bp']].map(k=>take(k[0],k[1])),'g09-amicaliste-signe','fiche');
+after([take('n3-outils','imp'),take('n2-non-amicalistes','sel')],'n2-non-amicalistes','liste');
+const k=C.findIndex(c=>!Array.isArray(c)&&c.t&&c.t.indexOf('Installe l')===0);if(k>=0)C.push(C.splice(k,1)[0])})();
 const Q=[];C.forEach((c,ci)=>{Q.push({card:c,ci});(c.s||[]).forEach(s=>Q.push({ci,img:s[0],mk:s[1],t:s[2],p:s[3]}))});Q.push({card:FIN,fin:1,ci:C.length});
 let i=0;const $=s=>document.querySelector(s);
 Q.forEach(q=>{if(q.img){const im=new Image();im.src='guide/'+q.img+'.jpg'}});
