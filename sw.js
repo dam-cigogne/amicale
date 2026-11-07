@@ -1,9 +1,9 @@
-/* Service worker de l'appli Amicale (copie de celui d'AgenDam) — hors connexion.
+/* Service worker de l'appli Agenda — hors connexion.
    Le nom du cache porte la version : à chaque nouvelle version, changer VERSION
    ici ET APP_VERSION dans index.html. Préfixe « agd- » : on ne touche jamais
    aux caches des autres applis du même domaine (mc-, glf-…). */
-const VERSION = '2.63.1';
-const CACHE = 'agd-am-cache-v' + VERSION;
+const VERSION = '2.64.0';
+const CACHE = 'agd-cache-v' + VERSION;
 const ASSETS = [
   './',
   'index.html',
@@ -24,7 +24,7 @@ self.addEventListener('install', e => {
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys()
-      .then(keys => Promise.all(keys.filter(k => k.startsWith('agd-am-cache-v') && k !== CACHE).map(k => caches.delete(k))))
+      .then(keys => Promise.all(keys.filter(k => k.startsWith('agd-cache-v') && k !== CACHE).map(k => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
