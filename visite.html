@@ -286,7 +286,7 @@ take('e5-journal','clr');
 take('a9-bulletin','pn');take('a9-bulletin','sv');take('a9b-bulletin-signe','sig');
 after([['a9-bulletin','pn'],['a9-bulletin','sv'],['a9b-bulletin-signe','pv'],['a9b-bulletin-signe','sig'],['p5-bulletin','*'],['a10-menu','send'],['a11-papier','bp']].map(k=>take(k[0],k[1])),'g09-amicaliste-signe','fiche');
 after([take('n3-outils','imp'),take('n2-non-amicalistes','sel')],'n2-non-amicalistes','liste');
-const OR=['Nouvel amicaliste','Grade, catégorie…','Dans la fiche','📞 Téléphone et ✉️ mail','Régime particulier','Inscrire un amicaliste : le faire signer','Service','👁 Le montrer avant','Il signe au doigt ✍️','Le prix se calcule tout seul','Le règlement','Signature au doigt ✍️','Valider','📄 Le bulletin d’adhésion signé','Et voilà !','Et ensuite ?','Déjà signé sur papier ?','📥 Votre fichier Excel','🧹 Retirer les doublons'];
+const OR=['Nouvel amicaliste','Grade, catégorie…','Dans la fiche','📞 Téléphone et ✉️ mail','Régime particulier','Inscrire un amicaliste : le faire signer','Service','Il signe au doigt ✍️','Le prix se calcule tout seul','Le règlement','👁 Le montrer avant','Signature au doigt ✍️','Valider','📄 Le bulletin d’adhésion signé','Et voilà !','Et ensuite ?','Déjà signé sur papier ?','📥 Votre fichier Excel','🧹 Retirer les doublons'];
 {const ch=C.find(c=>!Array.isArray(c)&&c.t==='Les amicalistes');if(ch&&ch.s){const rk=(s,i)=>{const j=OR.indexOf(s[2]);return j>=0?j:100+i};ch.s=ch.s.map((s,i)=>[rk(s,i),s]).sort((a,b)=>a[0]-b[0]).map(x=>x[1])}}
 const k=C.findIndex(c=>!Array.isArray(c)&&c.t&&c.t.indexOf('Installe l')===0);if(k>=0)C.push(C.splice(k,1)[0])})();
 const Q=[];C.forEach((c,ci)=>{Q.push({card:c,ci});(c.s||[]).forEach(s=>Q.push({ci,img:s[0],mk:s[1],t:s[2],p:s[3]}))});Q.push({card:FIN,fin:1,ci:C.length});
