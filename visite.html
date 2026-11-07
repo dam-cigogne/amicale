@@ -283,6 +283,7 @@ const take=(img,mk)=>{const r=fs(img,mk);if(r)return r[0].s.splice(r[1],1)[0];co
 const after=(list,img,mk)=>{const r=fs(img,mk);if(r)r[0].s.splice(r[1]+1,0,...list.filter(Boolean))};
 after([take('e3-jourj-encaisser','euro'),take('e3-jourj-encaisser','cpt')],'g24-jour-j','p1');
 take('e5-journal','clr');
+take('a9-bulletin','pn');take('a9-bulletin','sv');take('a9b-bulletin-signe','sig');
 after([['a9-bulletin','pn'],['a9-bulletin','sv'],['a9b-bulletin-signe','pv'],['a9b-bulletin-signe','sig'],['p5-bulletin','*'],['a10-menu','send'],['a11-papier','bp']].map(k=>take(k[0],k[1])),'g09-amicaliste-signe','fiche');
 after([take('n3-outils','imp'),take('n2-non-amicalistes','sel')],'n2-non-amicalistes','liste');
 const OR=['Nouvel amicaliste','Grade, catégorie…','Dans la fiche','📞 Téléphone et ✉️ mail','Régime particulier','Inscrire un amicaliste : le faire signer','Service','👁 Le montrer avant','Il signe au doigt ✍️','Le prix se calcule tout seul','Le règlement','Signature au doigt ✍️','Valider','📄 Le bulletin d’adhésion signé','Et voilà !','Et ensuite ?','Déjà signé sur papier ?','📥 Votre fichier Excel','🧹 Retirer les doublons'];
@@ -290,7 +291,7 @@ const OR=['Nouvel amicaliste','Grade, catégorie…','Dans la fiche','📞 Tél�
 const k=C.findIndex(c=>!Array.isArray(c)&&c.t&&c.t.indexOf('Installe l')===0);if(k>=0)C.push(C.splice(k,1)[0])})();
 const Q=[];C.forEach((c,ci)=>{Q.push({card:c,ci});(c.s||[]).forEach(s=>Q.push({ci,img:s[0],mk:s[1],t:s[2],p:s[3]}))});Q.push({card:FIN,fin:1,ci:C.length});
 let i=0;const $=s=>document.querySelector(s);
-Q.forEach(q=>{if(q.img){const im=new Image();im.src='guide/'+q.img+'.jpg'}});
+Q.forEach(q=>{if(q.img){const im=new Image();im.src='guide/'+q.img+'.jpg?v=20261107b'}});
 function box(q){if(q.mk==='*')return[50,30,100,40];const f=(FIX[q.img]||{})[q.mk];return f||((MK[q.img]||{})[q.mk])||[50,50,80,10]}
 function show(){
  document.querySelectorAll('.card').forEach(e=>e.remove());const MD=vMode(),autoLand=innerWidth>innerHeight*1.15&&innerWidth>=700,landOn=MD==='paysage'||(MD==='auto'&&(autoLand||(innerWidth>innerHeight&&innerHeight<620))),crop=landOn&&innerHeight<620;document.body.classList.toggle('crop',crop);document.body.classList.toggle('land',landOn);$('#md').textContent=MD==='portrait'?'📱':MD==='paysage'?'🖥':'⇄';$('#bub').style.display=Q[i].card?'none':'';
@@ -299,7 +300,7 @@ function show(){
  if(q.card){const d=document.createElement('div');d.className='card';
   d.innerHTML='<div class="em">'+q.card.em+'</div><h1>'+q.card.t+'</h1><p>'+q.card.p+'</p>'+(q.fin?'<div class="lnk"><a href="./">📱 Ouvrir l’appli</a><a href="./?demo=1">🧪 Essayer la démo</a><a href="guide.html">📖 Le guide à lire</a></div><button class="go" data-r="1">↺ Revoir la visite</button>':'<button class="go">'+(i===0?'C’est parti ! ▶':'Voir ▶')+'</button>'+(i===0?'<div class="sm">Astuce : touche à droite pour avancer, à gauche pour revenir. Flèches du clavier sur ordinateur.</div>':''));
   document.body.appendChild(d);if(q.fin)confetti();return}
- const img=$('#img'),src='guide/'+q.img+'.jpg';if(!img.src.endsWith(src)){img.style.opacity=0;img.onload=()=>img.style.opacity=1;img.src=src}
+ const img=$('#img'),src='guide/'+q.img+'.jpg?v=20261107b';if(!img.src.endsWith(src)){img.style.opacity=0;img.onload=()=>img.style.opacity=1;img.src=src}
  const paper=q.img[0]==='p';document.body.classList.toggle('paperon',paper);$('#zw').classList.toggle('paper',paper);
  const [x,y,w,h]=box(q),H=$('#hole'),pad=1.2;H.style.display=paper?'none':'';
  H.style.left=(x-w/2-pad)+'%';H.style.top=(y-h/2-pad*0.5)+'%';H.style.width=(w+2*pad)+'%';H.style.height=(h+pad)+'%';
