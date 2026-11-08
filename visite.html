@@ -66,7 +66,7 @@ body.land .card p{font-size:clamp(1rem,3vh,1.9rem);max-width:min(70vw,60rem)}
 body.land .card .go{font-size:clamp(1.05rem,2.8vh,1.8rem);padding:.8em 1.6em}
 body.land .card .sm{font-size:clamp(.8rem,1.9vh,1.2rem)}
 body.land .card .lnk a{font-size:clamp(.95rem,2.3vh,1.5rem)}
-#bub h3{margin:0 0 .25rem;font-size:1.05rem;color:#4c1d95}#bub p{margin:0;font-size:.95rem}
+#bub h3{margin:0 0 .25rem;font-size:calc(1.05rem*var(--k,1));color:#4c1d95}#bub p{margin:0;font-size:calc(.95rem*var(--k,1))}
 #bub b{color:#5b21b6}#bub .who{display:inline-block;font-size:.72rem;font-weight:800;background:#ede9fe;color:#6d28d9;border-radius:.4rem;padding:0 .35rem;margin-left:.25rem;vertical-align:2px}
 #bub .k{display:inline-block;background:#ede9fe;color:#5b21b6;font-weight:800;border-radius:.35rem;padding:0 .3rem}
 #hint{position:fixed;left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + .7rem);z-index:20;display:flex;justify-content:center;gap:.6rem}
@@ -315,8 +315,8 @@ function show(){
  const zh=zw*(paper?1123/794:844/390),ty=zh>r.height+2?Math.max(r.height-zh,Math.min(0,r.height/2-y/100*zh)):0,tx=k>1?Math.max(r.width-zw,Math.min(0,r.width/2-x/100*zw)):0;Z.style.transform='translate('+tx+'px,'+ty+'px)';
  const zt=r.top+ty,mx=r.left+tx+x/100*zw,my=zt+y/100*zh,mt=zt+(y-h/2)/100*zh,mb=zt+(y+h/2)/100*zh;
  B.style.width=land?(crop?Math.max(200,innerWidth-r.right-30)+'px':''):Math.min(330,r.width-16)+'px';
- B.style.fontSize='';let bw=B.offsetWidth,bh=B.offsetHeight;
- if(!land&&!paper){let fs=16;const room=()=>Math.max(mt-r.top-20,r.bottom-mb-20);while(bh>room()&&fs>10){fs-=.5;B.style.fontSize=fs+'px';bw=B.offsetWidth;bh=B.offsetHeight}}
+ B.style.removeProperty('--k');let bw=B.offsetWidth,bh=B.offsetHeight;
+ if(!land&&!paper){let kk=1;const room=()=>Math.max(mt-r.top-20,r.bottom-mb-20);while(bh>room()&&kk>.55){kk-=.05;B.style.setProperty('--k',kk);bw=B.offsetWidth;bh=B.offsetHeight}}
  if(land){const left=r.right+(crop?18:28);let top=(innerHeight-bh)/2;if(my<top+24)top=my-24;if(my>top+bh-24)top=my-bh+24;top=Math.max(8,Math.min(innerHeight-bh-8,top));
   B.className='lf';B.style.left=left+'px';B.style.top=top+'px';B.style.setProperty('--ty',Math.max(20,Math.min(bh-20,my-top))+'px');return}
  if(paper){B.className='';B.style.left=Math.max(8,Math.min(innerWidth-bw-8,r.left+(r.width-bw)/2))+'px';B.style.top=Math.max(8,r.bottom-bh-10)+'px';return}
