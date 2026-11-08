@@ -293,10 +293,11 @@ const OR=['Nouvel amicaliste','Grade, catégorie…','Dans la fiche','📞 Tél�
 {const ch=C.find(c=>!Array.isArray(c)&&c.t==='Les amicalistes');if(ch&&ch.s){const rk=(s,i)=>{const j=OR.indexOf(s[2]);return j>=0?j:100+i};ch.s=ch.s.map((s,i)=>[rk(s,i),s]).sort((a,b)=>a[0]-b[0]).map(x=>x[1])}}
 const k=C.findIndex(c=>!Array.isArray(c)&&c.t&&c.t.indexOf('Installe l')===0);if(k>=0)C.push(C.splice(k,1)[0])})();
 /* 🔔 chapitre notifications (08/11) */
-FIX['n6-notif-activer']={tog:[50,15,87,6.5]};FIX['n7-notif-test']={test:[41.3,30.7,69.1,4.4]};
+FIX['n6-notif-activer']={tog:[50,15,87,6.5]};FIX['n7-notif-test']={test:[41.3,30.7,69.1,4.4]};FIX['n8-notif-choix']={ch:[50,36.8,90,17]};
 {const k=C.findIndex(c=>!Array.isArray(c)&&c.t==='Rejoindre le groupe');
 C.splice(k>=0?k+1:3,0,{em:'🔔',t:'Les notifications',p:'Pour être prévenu quand quelqu’un du groupe change quelque chose, <b>même appli fermée</b>. À faire une fois par téléphone.',s:[
  ['n6-notif-activer','tog','Les activer','Touche ⚙️ <b>Réglages</b>, puis <b>Notifications</b> : mets l’interrupteur sur « Me prévenir… ». Accepte quand le téléphone demande l’autorisation.<br><small>iPhone : ajoute d’abord l’appli à l’écran d’accueil.</small>'],
+ ['n8-notif-choix','ch','Choisir ce qui te prévient','Sous l’interrupteur, <b>coche ou décoche</b> chaque rubrique : ☑ Tâches, 🛒 Courses, 📅 Agenda, 🎉 Événements… et pour le bureau 📝 Notes, 🎖 Amicalistes, 📁 Administratif, 🎁 Cadeaux, 📰 AG et bulletins.<br>Ici, les <b>Courses</b> sont décochées : plus de notification pour elles. Chacun règle son propre téléphone.'],
  ['n7-notif-test','test','Vérifier que ça marche','Touche <b>Envoyer un test</b> : une notification « ✅ Test réussi » arrive. Ensuite, le titre dit d’où vient le changement : <b>🛒 Amicale · Courses</b>, <b>☑ Amicale · Tâches</b>, <b>🏠 Famille · Agenda</b>…<br><small>Jamais pour tes propres changements, au plus une toutes les 2 minutes. Pour arrêter : remets l’interrupteur sur non.</small>']
 ]})}
 const Q=[];C.forEach((c,ci)=>{Q.push({card:c,ci});(c.s||[]).forEach(s=>Q.push({ci,img:s[0],mk:s[1],t:s[2],p:s[3]}))});Q.push({card:FIN,fin:1,ci:C.length});
