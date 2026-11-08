@@ -292,9 +292,16 @@ take('n1-deux-listes','chips');{const sl=take('n2-non-amicalistes','sel'),ch0=C.
 const OR=['Nouvel amicaliste','Grade, catégorie…','Dans la fiche','📞 Téléphone et ✉️ mail','Régime particulier','Inscrire un amicaliste : le faire signer','Service','Il signe au doigt ✍️','Le prix se calcule tout seul','Le règlement','👁 Le montrer avant','📄 Le bulletin d’adhésion signé','Signature au doigt ✍️','Valider','Et voilà !','Et ensuite ?','Déjà signé sur papier ?','📥 Importer des listes d’amicalistes','🧹 Retirer les doublons','Deux listes','Ajouter un non-amicaliste','Passer de l’un à l’autre','☑ Sélectionner'];
 {const ch=C.find(c=>!Array.isArray(c)&&c.t==='Les amicalistes');if(ch&&ch.s){const rk=(s,i)=>{const j=OR.indexOf(s[2]);return j>=0?j:100+i};ch.s=ch.s.map((s,i)=>[rk(s,i),s]).sort((a,b)=>a[0]-b[0]).map(x=>x[1])}}
 const k=C.findIndex(c=>!Array.isArray(c)&&c.t&&c.t.indexOf('Installe l')===0);if(k>=0)C.push(C.splice(k,1)[0])})();
+/* 🔔 chapitre notifications (08/11) */
+FIX['n6-notif-activer']={tog:[50,15,87,6.5]};FIX['n7-notif-test']={test:[41.3,30.7,69.1,4.4]};
+{const k=C.findIndex(c=>!Array.isArray(c)&&c.t==='Rejoindre le groupe');
+C.splice(k>=0?k+1:3,0,{em:'🔔',t:'Les notifications',p:'Pour être prévenu quand quelqu’un du groupe change quelque chose, <b>même appli fermée</b>. À faire une fois par téléphone.',s:[
+ ['n6-notif-activer','tog','Les activer','Touche ⚙️ <b>Réglages</b>, puis <b>Notifications</b> : mets l’interrupteur sur « Me prévenir… ». Accepte quand le téléphone demande l’autorisation.<br><small>iPhone : ajoute d’abord l’appli à l’écran d’accueil.</small>'],
+ ['n7-notif-test','test','Vérifier que ça marche','Touche <b>Envoyer un test</b> : une notification « ✅ Test réussi » arrive. Ensuite, le titre dit d’où vient le changement : <b>🛒 Amicale · Courses</b>, <b>☑ Amicale · Tâches</b>, <b>🏠 Famille · Agenda</b>…<br><small>Jamais pour tes propres changements, au plus une toutes les 2 minutes. Pour arrêter : remets l’interrupteur sur non.</small>']
+]})}
 const Q=[];C.forEach((c,ci)=>{Q.push({card:c,ci});(c.s||[]).forEach(s=>Q.push({ci,img:s[0],mk:s[1],t:s[2],p:s[3]}))});Q.push({card:FIN,fin:1,ci:C.length});
 let i=0;const $=s=>document.querySelector(s);
-Q.forEach(q=>{if(q.img){const im=new Image();im.src='guide/'+q.img+'.jpg?v=20261107b'}});
+Q.forEach(q=>{if(q.img){const im=new Image();im.src='guide/'+q.img+'.jpg?v=20261108a'}});
 function box(q){if(q.mk==='*')return[50,30,100,40];const f=(FIX[q.img]||{})[q.mk];return f||((MK[q.img]||{})[q.mk])||[50,50,80,10]}
 function show(){
  document.querySelectorAll('.card').forEach(e=>e.remove());const MD=vMode(),autoLand=innerWidth>innerHeight*1.15&&innerWidth>=700,landOn=MD==='paysage'||(MD==='auto'&&(autoLand||(innerWidth>innerHeight&&innerHeight<620))),crop=landOn&&innerHeight<620;document.body.classList.toggle('crop',crop);document.body.classList.toggle('land',landOn);$('#md').textContent=MD==='portrait'?'📱':MD==='paysage'?'🖥':'⇄';$('#bub').style.display=Q[i].card?'none':'';
@@ -303,7 +310,7 @@ function show(){
  if(q.card){const d=document.createElement('div');d.className='card';
   d.innerHTML='<div class="em">'+q.card.em+'</div><h1>'+q.card.t+'</h1><p>'+q.card.p+'</p>'+(q.fin?'<div class="lnk"><a href="./">📱 Ouvrir l’appli</a><a href="./?demo=1">🧪 Essayer la démo</a><a href="guide.html">📖 Le guide à lire</a></div><button class="go" data-r="1">↺ Revoir la visite</button>':'<button class="go">'+(i===0?'C’est parti ! ▶':'Voir ▶')+'</button>'+(i===0?'<div class="sm">Astuce : touche à droite pour avancer, à gauche pour revenir. Flèches du clavier sur ordinateur.</div>':''));
   document.body.appendChild(d);if(q.fin)confetti();return}
- const img=$('#img'),src='guide/'+q.img+'.jpg?v=20261107b';if(!img.src.endsWith(src)){img.style.opacity=0;img.onload=()=>img.style.opacity=1;img.src=src}
+ const img=$('#img'),src='guide/'+q.img+'.jpg?v=20261108a';if(!img.src.endsWith(src)){img.style.opacity=0;img.onload=()=>img.style.opacity=1;img.src=src}
  const paper=q.img[0]==='p';document.body.classList.toggle('paperon',paper);$('#zw').classList.toggle('paper',paper);
  const [x,y,w,h]=box(q),H=$('#hole'),pad=1.2;H.style.display=paper?'none':'';
  H.style.left=(x-w/2-pad)+'%';H.style.top=(y-h/2-pad*0.5)+'%';H.style.width=(w+2*pad)+'%';H.style.height=(h+pad)+'%';
