@@ -285,7 +285,7 @@ C.push({em:'💡',t:'Une question, une idée, un problème ?',p:'L’onglet <b>�
   ['i1-idees','like','👍 Soutenir une idée','On touche 👍 pour dire « moi aussi » : on voit combien et qui la soutiennent (ici Claire et Anne).'],
   ['i1-idees','who','Qui participe','En haut, qui a proposé combien d’idées et combien sont validées. Exemple : « Claire Moreau 2 idées · ✅ 2 ».'],
   ['i2-idees-valider','dlg','L’administrateur répond','Il choisit ✅ Validée, 🛠 En cours, ✔️ Faite ou ❌ Pas retenue, et peut écrire une réponse visible par tous : « Merci Luc, on l’agrandit dans la prochaine version ».'],
-  ['i1-idees','filtres','🔔 Tout le monde est prévenu','Avec les notifications activées, chacun est prévenu des nouveaux messages et des réponses (pas des 👍). Les filtres Nouvelles / Validées / Faites aident à s’y retrouver.']]});
+  ['i1-idees','filtres','🔔 Tout le monde est prévenu','Avec les notifications activées, chacun est prévenu des nouveaux messages et des réponses (pas des 👍). Pour ne plus être prévenu, décoche 💡 Boîte à idées dans Réglages › Notifications. Les filtres Nouvelles / Validées / Faites aident à s’y retrouver.']]});
 const FIN={em:'🎉',t:'Bravo, tu sais tout !',p:'Essaie toi-même dans la démo : rien n’y est enregistré.'};
 // suite linéaire : carte de chapitre puis ses étapes
 /* ordre des diapos : corrections du 07/11 */
@@ -305,8 +305,8 @@ FIX['n6-notif-activer']={tog:[50,15,87,6.5]};FIX['n7-notif-test']={test:[41.3,30
 {const k=C.findIndex(c=>!Array.isArray(c)&&c.t==='Rejoindre le groupe');
 C.splice(k>=0?k+1:3,0,{em:'🔔',t:'Les notifications',p:'Pour être prévenu quand quelqu’un du groupe change quelque chose, <b>même appli fermée</b>. À faire une fois par téléphone.',s:[
  ['n6-notif-activer','tog','Les activer','Touche ⚙️ <b>Réglages</b>, puis <b>Notifications</b> : mets l’interrupteur sur « Me prévenir… ». Accepte quand le téléphone demande l’autorisation.<br><small>iPhone : ajoute d’abord l’appli à l’écran d’accueil.</small>'],
- ['n8-notif-choix','ch','Choisir ce qui te prévient','Sous l’interrupteur, <b>coche ou décoche</b> chaque rubrique : ☑ Tâches, 🛒 Courses, 📅 Agenda, 🎉 Événements… et pour le bureau 📝 Notes, 🎖 Amicalistes, 📁 Administratif, 🎁 Cadeaux, 📰 AG et bulletins.<br>Ici, les <b>Courses</b> sont décochées : plus de notification pour elles. Chacun règle son propre téléphone.'],
- ['n7-notif-test','test','Vérifier que ça marche','Touche <b>Envoyer un test</b> : une notification « ✅ Test réussi » arrive. Ensuite, le titre dit d’où vient le changement : <b>🛒 Amicale · Courses</b>, <b>☑ Amicale · Tâches</b>, <b>🏠 Famille · Agenda</b>…<br><small>Jamais pour tes propres changements, au plus une toutes les 2 minutes. Pour arrêter : remets l’interrupteur sur non.</small>']
+ ['n8-notif-choix','ch','Choisir ce qui te prévient','Sous l’interrupteur, <b>coche ou décoche</b> chaque rubrique : ☑ Tâches, 🛒 Courses, 📅 Agenda, 🎉 Événements, 💡 Boîte à idées… et pour le bureau 📝 Notes, 🎖 Amicalistes, 📁 Administratif, 🎁 Cadeaux, 📰 AG et bulletins.<br>Ici, les <b>Courses</b> sont décochées : plus de notification pour elles. Chacun règle son propre téléphone.'],
+ ['n7-notif-test','test','Vérifier que ça marche','Touche <b>Envoyer un test</b> : une notification « ✅ Test réussi » arrive sur ce téléphone seulement, une par groupe. Ensuite, le titre dit d’où vient le changement : <b>🛒 Amicale · Courses</b>, <b>☑ Amicale · Tâches</b>, <b>🏠 Famille · Agenda</b>…<br><small>Jamais pour tes propres changements, au plus une toutes les 2 minutes. Pour arrêter : remets l’interrupteur sur non.</small> En dessous, <b>🔍 Qui reçoit les notifications ?</b> montre, pour chaque groupe, les téléphones inscrits : si quelqu’un ne reçoit rien, tu vois tout de suite pourquoi.']
 ]})}
 /* 🔒 chapitre verrou de l'appli (08/11) */
 FIX['n9-verrou-activer']={mk:[25,33.6,40,5]};FIX['n9-verrou-options']={bio:[44,53,76,5]};FIX['n9-verrou-ecran']={ouv:[50,61.3,54,6.5]};
