@@ -41,7 +41,6 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--ac)}
 <label for="gr">Grade</label><select id="gr"></select>
 <label for="sv">Service <small>(facultatif)</small></label><input id="sv" maxlength="40">
 <label for="ct">Catégorie</label><select id="ct"></select>
-<label for="ad">Adresse <small>(facultatif)</small></label><input id="ad" autocomplete="street-address" maxlength="120">
 <label for="tl">Téléphone</label><input id="tl" type="tel" autocomplete="tel" maxlength="20">
 <label for="ml">Mail <small>(facultatif)</small></label><input id="ml" type="email" autocomplete="email" maxlength="80">
 <label>Étais-tu déjà amicaliste l’an dernier ?</label><div class="seg" id="am"><button type="button" data-v="o">Oui</button><button type="button" data-v="n">Non, c’est nouveau</button></div>
@@ -78,7 +77,7 @@ $('go').addEventListener('click',function(){
  if(!tl&&!g('ml')){err('Laisse un téléphone ou un mail pour qu’on puisse te joindre.');return}
  if(!$('ok').checked){err('Coche la case d’accord en bas pour envoyer.');return}
  err('');var bt=$('go');bt.disabled=true;bt.textContent='Envoi…';
- var data={t:'ad',nm:nm,pr:pr,gr:g('gr'),sv:g('sv'),ct:g('ct'),ad:g('ad'),tl:tl,ml:g('ml'),an:AM,rg:g('rg'),mo:g('mo'),ok:1,v:1};
+ var data={t:'ad',nm:nm,pr:pr,gr:g('gr'),sv:g('sv'),ct:g('ct'),tl:tl,ml:g('ml'),an:AM,rg:g('rg'),mo:g('mo'),ok:1,v:1};
  var S=crypto.subtle,kp,ej;
  S.generateKey({name:'ECDH',namedCurve:'P-256'},true,['deriveBits']).then(function(k){kp=k;return S.exportKey('jwk',k.publicKey)}).then(function(j){ej=j;
   return S.importKey('jwk',{kty:'EC',crv:'P-256',x:X,y:Y,ext:true},{name:'ECDH',namedCurve:'P-256'},false,[])}).then(function(pub){
