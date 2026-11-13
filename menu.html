@@ -31,6 +31,7 @@ th{color:var(--gold);font-weight:700;font-size:.82rem;text-transform:uppercase;l
 .foot{text-align:center;opacity:.6;font-size:.8rem;margin-top:22px;font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif}
 .msg{text-align:center;margin-top:60px}
 .pic{margin-top:14px;border-radius:18px;overflow:hidden;box-shadow:0 12px 34px rgba(0,0,0,.5)}.pic img{display:block;width:100%;height:auto}
+.pr{margin:.2rem 0 .8rem}.pr:last-child{margin-bottom:.2rem}.pr-h{font-weight:800;color:var(--gold);margin:0 0 .3rem;font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif}.pr-l{display:flex;justify-content:space-between;gap:.8rem;padding:.45rem .1rem;border-bottom:1px solid var(--line);font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;font-size:1rem}.pr-l b{white-space:nowrap;font-size:1.1rem}
 .tip{text-align:center;font:.8rem -apple-system,Arial,sans-serif;opacity:.6;margin:.4rem 0 0}
 .txt{margin-top:12px}.txt summary{cursor:pointer;text-align:center;color:var(--gold);font-family:-apple-system,Arial,sans-serif;font-size:.9rem;padding:.4rem}
 </style>
@@ -54,7 +55,9 @@ fetch(API+'/pub/'+id,{cache:'no-store'}).then(function(r){if(r.status===404)thro
  if(d.img)h+='<div class="pic"><img src="'+String(d.img).replace(/"/g,'')+'" alt="Menu"></div><p class="tip">Écarte deux doigts pour agrandir</p>';
  h+=(d.img?'<details class="txt"><summary>Version texte du menu</summary>':'')+'<div class="card '+cls+'">'+(S.length?S.map(function(x){return (x.h?'<div class="mh">'+esc(x.h)+'</div><div class="orn">❦</div>':'')+x.L.map(function(v){return '<div class="mi">'+esc(v)+'</div>'}).join('')}).join(''):'<p class="mi"><i>Le menu arrive bientôt…</i></p>')+'</div>';
  if(d.img)h+='</details>';
- if(d.p&&d.p.length){var hc=d.p.some(function(r){return r[3]!=null}),he=d.p.some(function(r){return r[4]!=null});h+='<div class="card"><h2>💶 Tarifs</h2><table><tr><th></th><th>Amicaliste</th>'+(hc?'<th>Accompagnant</th>':'')+'<th>Non-amicaliste</th>'+(he?'<th>Enfant</th>':'')+'</tr>'+d.p.map(function(r){return '<tr><td>'+esc(r[0])+'</td><td>'+eur(r[1])+'</td>'+(hc?'<td>'+(r[3]!=null?(+r[3]?eur(r[3]):'Gratuit'):'')+'</td>':'')+'<td>'+eur(r[2])+'</td>'+(he?'<td>'+(r[4]!=null?(+r[4]?eur(r[4]):'Gratuit'):'')+'</td>':'')+'</tr>'}).join('')+'</table></div>'}
+ if(d.p&&d.p.length){var hc=d.p.some(function(r){return r[3]!=null}),he=d.p.some(function(r){return r[4]!=null}),pv=function(v){return v==null?'':(+v?eur(v):'Gratuit')};
+  h+='<div class="card"><h2>💶 Tarifs</h2>'+d.p.map(function(r){var L=[['🎖 Amicaliste',eur(r[1])]];if(hc&&r[3]!=null)L.push(['🤝 Accompagnant d’un amicaliste',pv(r[3])]);L.push(['👤 Non-amicaliste',eur(r[2])]);if(he&&r[4]!=null)L.push(['🧒 Enfant',pv(r[4])]);
+   return '<div class="pr"><div class="pr-h">'+esc(r[0])+'</div>'+L.map(function(x){return '<div class="pr-l"><span>'+x[0]+'</span><b>'+x[1]+'</b></div>'}).join('')+'</div>'}).join('')+'</div>'}
  h+='<div class="foot">Mis à jour le '+esc(new Date(j.at).toLocaleString('fr-FR',{day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'}))+'</div>';
  W.innerHTML=h;
 }).catch(function(e){W.innerHTML='<p class="msg">Menu indisponible pour l’instant ('+esc(e&&e.message||'connexion')+'). Réessaie dans un moment.</p>'});
