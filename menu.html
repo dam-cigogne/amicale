@@ -30,6 +30,9 @@ th,td{padding:.55rem .4rem;border-bottom:1px solid var(--line);text-align:right}
 th{color:var(--gold);font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:.04em}
 .foot{text-align:center;opacity:.6;font-size:.8rem;margin-top:22px;font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif}
 .msg{text-align:center;margin-top:60px}
+.pic{margin-top:14px;border-radius:18px;overflow:hidden;box-shadow:0 12px 34px rgba(0,0,0,.5)}.pic img{display:block;width:100%;height:auto}
+.tip{text-align:center;font:.8rem -apple-system,Arial,sans-serif;opacity:.6;margin:.4rem 0 0}
+.txt{margin-top:12px}.txt summary{cursor:pointer;text-align:center;color:var(--gold);font-family:-apple-system,Arial,sans-serif;font-size:.9rem;padding:.4rem}
 </style>
 </head>
 <body>
@@ -48,7 +51,9 @@ fetch(API+'/pub/'+id,{cache:'no-store'}).then(function(r){if(r.status===404)thro
  document.title=(d.mt||'Menu')+(d.t?' · '+d.t:'');
  var cls=d.mnf==='sc'?'sc':d.mnf==='mo'?'mo':d.mnf==='ch'?'ch':'';
  var h='<div class="top">'+(d.g?'<div class="g">'+esc(d.g)+'</div>':'')+'<h1>'+esc(d.mt||('Menu'+(/noel/.test(d.th||'')?' de Noël':'')))+'</h1>'+(d.t?'<div class="ev">'+esc(d.t)+'</div>':'')+'<div class="meta">'+[dd?'📅 '+esc(dd)+(d.hr?' · '+esc(d.hr):''):'',d.pl?'📍 '+esc(d.pl):''].filter(Boolean).join('<br>')+'</div></div>';
- h+='<div class="card '+cls+'">'+(S.length?S.map(function(x){return (x.h?'<div class="mh">'+esc(x.h)+'</div><div class="orn">❦</div>':'')+x.L.map(function(v){return '<div class="mi">'+esc(v)+'</div>'}).join('')}).join(''):'<p class="mi"><i>Le menu arrive bientôt…</i></p>')+'</div>';
+ if(d.img)h+='<div class="pic"><img src="'+String(d.img).replace(/"/g,'')+'" alt="Menu"></div><p class="tip">Écarte deux doigts pour agrandir</p>';
+ h+=(d.img?'<details class="txt"><summary>Version texte du menu</summary>':'')+'<div class="card '+cls+'">'+(S.length?S.map(function(x){return (x.h?'<div class="mh">'+esc(x.h)+'</div><div class="orn">❦</div>':'')+x.L.map(function(v){return '<div class="mi">'+esc(v)+'</div>'}).join('')}).join(''):'<p class="mi"><i>Le menu arrive bientôt…</i></p>')+'</div>';
+ if(d.img)h+='</details>';
  if(d.p&&d.p.length)h+='<div class="card"><h2>💶 Tarifs</h2><table><tr><th></th><th>Amicaliste</th><th>Non-amicaliste</th></tr>'+d.p.map(function(r){return '<tr><td>'+esc(r[0])+'</td><td>'+eur(r[1])+'</td><td>'+eur(r[2])+'</td></tr>'}).join('')+'</table></div>';
  h+='<div class="foot">Mis à jour le '+esc(new Date(j.at).toLocaleString('fr-FR',{day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'}))+'</div>';
  W.innerHTML=h;
