@@ -354,7 +354,7 @@ C.splice(k>=0?k+1:6,0,{em:'📲',t:'L’adhésion par QR code',p:'On scanne, on 
  ['h4-adh-valider','cand','✅ Valider','On choisit : c’est bien lui (sa fiche est mise à jour, pas de doublon) ou une autre personne (nouvelle fiche). Puis <b>faire signer maintenant</b> ou <b>plus tard</b>.'],
  ['h5-adh-signer','gr','📝 Le bulletin déjà rempli','Grade, catégorie, téléphone, mail… tout vient du formulaire. On met la cotisation et le règlement.'],
  ['h5b-adh-signature','sig','✍️ Il signe au doigt','Sur l’iPad. La cotisation est notée payée, le bulletin signé est rangé dans sa fiche (PDF à envoyer ou imprimer).'],
- ['h6-adh-a-signer','list','✍️ À faire signer','Ceux qui sont validés mais pas encore signés : <b>✍️ Signer</b> sur l’iPad, ou <b>🖨 Papier</b>.'],
+ ['h6-adh-a-signer','list','✍️ À faire signer','Ceux qui sont validés mais pas encore signés : <b>✍️ Signer</b> sur l’iPad, ou <b>🖨 Papier</b>. Juste en dessous, <b>💶 En attente de paiement</b> : ceux qui n’ont pas encore payé, avec 📞 Appeler, 💬 SMS, 💶 Payé, 📋 Copier la liste et 📨 Message de rappel.'],
  ['h7-adh-papier','pv','🖨 Le bulletin papier','Déjà rempli avec ses infos : on l’imprime, il signe au stylo, puis « ✓ Signé sur papier » le note dans sa fiche.']]})}
 const Q=[];C.forEach((c,ci)=>{Q.push({card:c,ci});(c.s||[]).forEach(s=>Q.push({ci,img:s[0],mk:s[1],t:s[2],p:s[3]}))});Q.push({card:FIN,fin:1,ci:C.length});
 let i=0;const $=s=>document.querySelector(s);
