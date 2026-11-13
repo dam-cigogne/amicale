@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1d4a">
+<meta name="robots" content="noindex">
+<title>Menu</title>
+<style>
+:root{--gold:#f6c453;--cream:#fff4dc;--bg1:#14306e;--bg2:#06112e;--card:rgba(255,255,255,.06);--line:rgba(246,196,83,.35)}
+*{box-sizing:border-box}
+html{background:#06112e}
+body{margin:0;min-height:100vh;color:var(--cream);background:radial-gradient(ellipse at 50% 0%,var(--bg1) 0%,var(--bg2) 70%) fixed;font:17px/1.45 Georgia,"Times New Roman",serif;-webkit-text-size-adjust:100%}
+.wrap{max-width:620px;margin:0 auto;padding:26px 18px 40px}
+.top{text-align:center;margin-bottom:14px}
+.g{font:700 .8rem/1.2 -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);opacity:.9}
+h1{margin:.25rem 0 .1rem;font:700 2.5rem/1.1 "Snell Roundhand","Segoe Script","Brush Script MT","Apple Chancery",cursive;color:var(--cream);text-shadow:0 0 14px rgba(255,184,77,.8),0 3px 6px rgba(0,0,0,.6)}
+.ev{font-weight:700;margin-top:.2rem}.meta{opacity:.85;font-size:.95rem;margin-top:.2rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px 18px 12px;margin-top:16px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.mh{color:var(--gold);font-weight:800;font-size:1.25rem;text-align:center;margin:.9rem 0 .25rem;text-shadow:0 0 10px rgba(255,184,77,.5)}
+.mh:first-child{margin-top:.1rem}
+.mi{text-align:center;padding:.1rem 0}
+.orn{text-align:center;color:var(--gold);opacity:.8;font-size:.9rem;line-height:1}
+.sc .mh{font:700 1.8rem/1.15 "Snell Roundhand","Segoe Script","Brush Script MT","Apple Chancery",cursive}
+.mo .mh{font-family:"Avenir Next",Avenir,"Trebuchet MS",Arial,sans-serif;text-transform:uppercase;letter-spacing:.14em;font-size:1rem}.mo .mi{font-family:"Avenir Next",Avenir,"Trebuchet MS",Arial,sans-serif}
+.ch,.ch .mh{font-family:"Chalkboard SE","Marker Felt","Comic Sans MS",cursive}
+h2{margin:0 0 .5rem;text-align:center;color:var(--gold);font-size:1.2rem}
+table{width:100%;border-collapse:collapse;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;font-size:.95rem}
+th,td{padding:.55rem .4rem;border-bottom:1px solid var(--line);text-align:right}th:first-child,td:first-child{text-align:left}
+th{color:var(--gold);font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:.04em}
+.foot{text-align:center;opacity:.6;font-size:.8rem;margin-top:22px;font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif}
+.msg{text-align:center;margin-top:60px}
+</style>
+</head>
+<body>
+<div class="wrap" id="w"><p class="msg">Chargement du menu…</p></div>
+<script>
+(function(){
+var API='https://agendam-famille.dam-cigogne.workers.dev',W=document.getElementById('w');
+function esc(t){return String(t==null?'':t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function eur(n){n=+n||0;return n?(Math.round(n*100)/100).toString().replace('.',',')+' €':'—'}
+function parse(t){var out=[],cur=null;String(t||'').replace(/\r/g,'').split('\n').forEach(function(l){var x=l.trim();if(!x)return;var m=x.match(/^([^:\-•*–][^:]{0,40}?)\s*:\s*(.*)$/);if(m&&!/^[-•*–]/.test(x)){cur={h:m[1].trim(),L:[]};out.push(cur);x=m[2].trim();if(!x)return}x=x.replace(/^[-•*–]\s*/,'');if(!cur){cur={h:'',L:[]};out.push(cur)}cur.L.push(x)});return out}
+var id=(location.hash||'').slice(1);
+if(!/^[0-9a-f]{32}$/.test(id)){W.innerHTML='<p class="msg">Lien du menu incomplet. Scanne à nouveau le QR code.</p>';return}
+fetch(API+'/pub/'+id,{cache:'no-store'}).then(function(r){if(r.status===404)throw new Error('pas encore publié');if(!r.ok)throw new Error('erreur '+r.status);return r.json()}).then(function(j){
+ var d=j.d||{},S=parse(d.mn),dd='';
+ try{if(d.d){var D=new Date(d.d+'T12:00:00');dd=D.toLocaleDateString('fr-FR',{weekday:'long'})+' '+(D.getDate()===1?'1er':D.getDate())+' '+D.toLocaleDateString('fr-FR',{month:'long'});dd=dd.charAt(0).toUpperCase()+dd.slice(1)}}catch(e){}
+ document.title=(d.mt||'Menu')+(d.t?' · '+d.t:'');
+ var cls=d.mnf==='sc'?'sc':d.mnf==='mo'?'mo':d.mnf==='ch'?'ch':'';
+ var h='<div class="top">'+(d.g?'<div class="g">'+esc(d.g)+'</div>':'')+'<h1>'+esc(d.mt||('Menu'+(/noel/.test(d.th||'')?' de Noël':'')))+'</h1>'+(d.t?'<div class="ev">'+esc(d.t)+'</div>':'')+'<div class="meta">'+[dd?'📅 '+esc(dd)+(d.hr?' · '+esc(d.hr):''):'',d.pl?'📍 '+esc(d.pl):''].filter(Boolean).join('<br>')+'</div></div>';
+ h+='<div class="card '+cls+'">'+(S.length?S.map(function(x){return (x.h?'<div class="mh">'+esc(x.h)+'</div><div class="orn">❦</div>':'')+x.L.map(function(v){return '<div class="mi">'+esc(v)+'</div>'}).join('')}).join(''):'<p class="mi"><i>Le menu arrive bientôt…</i></p>')+'</div>';
+ if(d.p&&d.p.length)h+='<div class="card"><h2>💶 Tarifs</h2><table><tr><th></th><th>Amicaliste</th><th>Non-amicaliste</th></tr>'+d.p.map(function(r){return '<tr><td>'+esc(r[0])+'</td><td>'+eur(r[1])+'</td><td>'+eur(r[2])+'</td></tr>'}).join('')+'</table></div>';
+ h+='<div class="foot">Mis à jour le '+esc(new Date(j.at).toLocaleString('fr-FR',{day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'}))+'</div>';
+ W.innerHTML=h;
+}).catch(function(e){W.innerHTML='<p class="msg">Menu indisponible pour l’instant ('+esc(e&&e.message||'connexion')+'). Réessaie dans un moment.</p>'});
+})();
+</script>
+</body>
+</html>
