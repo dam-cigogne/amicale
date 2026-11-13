@@ -87,7 +87,7 @@ $('go').addEventListener('click',function(){
   var iv=crypto.getRandomValues(new Uint8Array(12));return S.encrypt({name:'AES-GCM',iv:iv},key,new TextEncoder().encode(JSON.stringify(data))).then(function(c){return {e:{x:ej.x,y:ej.y},iv:b64u(iv),c:b64u(c)}})}).then(function(body){
   return fetch(API+'/in/'+ID,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})}).then(function(r){
   if(!r.ok)return r.json().then(function(j){throw new Error(j&&j.error||('erreur '+r.status))},function(){throw new Error('erreur '+r.status)});
-  $('c').innerHTML='<div class="ok"><b>🎉</b><h2>C’est envoyé !</h2><p>Merci '+pr.replace(/[<>&"]/g,'')+'. Ta demande d’adhésion est bien arrivée chez le bureau.</p><p><b>Dernière étape :</b> passe voir le bureau pour régler ta cotisation et signer ton bulletin. Tout sera déjà rempli.</p></div>';
+  $('c').innerHTML='<div class="ok"><b>🎉</b><h2>C’est envoyé !</h2><p>Merci '+pr.replace(/[<>&"]/g,'')+'. Ta demande d’adhésion est bien arrivée chez le bureau.</p><p><strong>Dernière étape :</strong> passe voir le bureau pour régler ta cotisation et signer ton bulletin. Tout sera déjà rempli.</p></div>';
  }).catch(function(e){bt.disabled=false;bt.textContent='✅ Envoyer ma demande d’adhésion';err('Envoi impossible : '+(e&&e.message||'vérifie ta connexion')+'. Réessaie dans un instant.')});
 });
 })();
