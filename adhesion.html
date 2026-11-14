@@ -24,7 +24,7 @@ input,textarea,select{width:100%;font:inherit;font-size:16px;padding:.7rem .8rem
 input:focus,textarea:focus,select:focus{outline:none;border-color:var(--ac)}
 .row{display:flex;gap:10px}.row>div{flex:1;min-width:0}
 .num{display:flex;align-items:center;gap:8px}.num button{width:44px;height:44px;border-radius:12px;border:1.5px solid var(--line);background:transparent;color:var(--tx);font-size:1.4rem;cursor:pointer}.num input{text-align:center;font-weight:800;font-size:1.15rem}
-.seg{display:flex;gap:8px;flex-wrap:wrap}.seg button{flex:1;min-width:6rem;padding:.65rem;border-radius:12px;border:1.5px solid var(--line);background:transparent;color:var(--tx);font:inherit;font-weight:700;cursor:pointer}.seg button.on{background:var(--ac);border-color:var(--ac);color:#fff}
+.seg{display:flex;gap:8px;flex-wrap:wrap}.seg button{flex:1 1 40%;min-width:6rem;padding:.65rem;border-radius:12px;border:1.5px solid var(--line);background:transparent;color:var(--tx);font:inherit;font-weight:700;cursor:pointer}.seg button.on{background:var(--ac);border-color:var(--ac);color:#fff}
 .go{display:block;width:100%;margin-top:1.1rem;padding:.95rem;border:0;border-radius:14px;background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;font:inherit;font-weight:800;font-size:1.08rem;cursor:pointer}
 .go[disabled]{opacity:.6}
 .mut{color:var(--mut);font-size:.85rem}
@@ -123,7 +123,7 @@ var ST=[],cur=null;
 function step2(d){var p=price(d);PY='';$('c').hidden=true;var s=$('s2');s.hidden=false;
  s.innerHTML='<h2>📝 Mon bulletin '+E(DOC.sa||'')+'</h2><p class="mut" style="margin:-.2rem 0 .5rem">Lis-le (fais défiler), puis signe en bas avec le doigt.</p><div class="paper">'+regHtml(d)+'</div>'+
   '<div class="pay">💶 Ma cotisation : '+(p!==''?'<big>'+E(eur(p))+'</big><br><small style="font-weight:600;opacity:.8">Le bureau vérifie le montant et te prévient s’il faut le corriger.</small>':'<span>le bureau t’indiquera le montant</span>')+'</div>'+
-  '<label>Je règle par</label><div class="seg" id="py"><button type="button" data-v="vir">🏦 Virement</button><button type="button" data-v="bur">🤝 Au bureau</button></div><p class="mut" id="pyx" style="margin:.4rem 0 0"></p>'+
+  '<label>Je règle par</label><div class="seg" id="py"><button type="button" data-v="vir">🏦 Virement</button><button type="button" data-v="cb">💳 Carte (SumUp)</button><button type="button" data-v="chq">🧾 Chèque</button><button type="button" data-v="esp">💶 Espèces</button></div><p class="mut" id="pyx" style="margin:.4rem 0 0"></p>'+
   '<label style="display:flex;gap:.6rem;align-items:flex-start;font-weight:400;margin-top:1rem"><input type="checkbox" id="lu" style="width:22px;height:22px;flex:none;margin:0"><span>J’ai lu le règlement et je l’accepte.</span></label>'+
   '<label>✍️ Ma signature</label><canvas id="sgc" width="760" height="260"></canvas><button type="button" class="lnk" id="sgx">🧽 Effacer et recommencer</button>'+
   '<button class="go" id="go2">✍️ Signer et envoyer</button><p class="err" id="er2" hidden></p><button type="button" class="lnk" id="back">← Modifier mes informations</button>';
@@ -137,9 +137,9 @@ function step2(d){var p=price(d);PY='';$('c').hidden=true;var s=$('s2');s.hidden
  $('sgx').onclick=function(){g.clearRect(0,0,760,260);ST=[]};
  $('back').onclick=function(){s.hidden=true;$('c').hidden=false;window.scrollTo(0,0)};
  $('py').onclick=function(e){var b=e.target.closest('button');if(!b)return;PY=b.dataset.v;[].forEach.call($('py').children,function(x){x.classList.toggle('on',x===b)});
-  $('pyx').textContent=PY==='vir'?'Fais ton virement en indiquant « Adhésion '+String(d.nm).toUpperCase()+' '+d.pr+' ». Demande le RIB à un membre du bureau.':'Passe voir un membre du bureau : espèces, chèque ou carte.'};
+  $('pyx').textContent=PY==='vir'?'Fais ton virement en indiquant « Adhésion '+String(d.nm).toUpperCase()+' '+d.pr+' ». Demande le RIB à un membre du bureau.':PY==='cb'?'Tu paieras par carte bancaire à un membre du bureau, avec le terminal SumUp.':PY==='chq'?'Tu donneras ton chèque à un membre du bureau (à l’ordre de l’amicale).':'Tu donneras tes espèces à un membre du bureau.'};
  $('go2').onclick=function(){var e2=function(t){var x=$('er2');x.textContent=t;x.hidden=!t};
-  if(!PY){e2('Choisis comment tu règles : virement ou au bureau.');return}
+  if(!PY){e2('Choisis comment tu règles : virement, carte, chèque ou espèces.');return}
   if(!$('lu').checked){e2('Coche « J’ai lu le règlement et je l’accepte ».');return}
   var n=0;ST.forEach(function(x){n+=x.length});if(n<8){e2('Signe dans le cadre avec ton doigt.');return}
   var d2={};for(var k in d)d2[k]=d[k];d2.py=PY;d2.pa=String(p);d2.sa=DOC.sa||'';d2.v=2;
@@ -160,7 +160,7 @@ function send(data,bt,lab,sig){bt.disabled=true;bt.textContent='Envoi…';var pr
   if(!r.ok)return r.json().then(function(j){throw new Error(j&&j.error||('erreur '+r.status))},function(){throw new Error('erreur '+r.status)});
   var box=sig?$('s2'):$('c');
   box.innerHTML=sig?'<div class="ok"><b>🎉</b><h2>Bienvenue à l’amicale !</h2><p>Merci '+E(pr)+'. Ton bulletin signé est bien arrivé chez le bureau.</p>'+
-   '<div class="pay" style="text-align:left">'+(sig.py==='vir'?'🏦 <strong>Dernière étape :</strong> fais ton virement'+(sig.p!==''?' de <big>'+E(eur(sig.p))+'</big>':'')+' en indiquant « Adhésion '+E(String(sig.nm).toUpperCase()+' '+sig.pr)+' ». Demande le RIB à un membre du bureau.':'🤝 <strong>Dernière étape :</strong> passe voir un membre du bureau pour régler'+(sig.p!==''?' <big>'+E(eur(sig.p))+'</big>':' ta cotisation')+' (espèces, chèque ou carte).')+'</div>'+
+   '<div class="pay" style="text-align:left">'+(sig.py==='vir'?'🏦 <strong>Dernière étape :</strong> fais ton virement'+(sig.p!==''?' de <big>'+E(eur(sig.p))+'</big>':'')+' en indiquant « Adhésion '+E(String(sig.nm).toUpperCase()+' '+sig.pr)+' ». Demande le RIB à un membre du bureau.':'🤝 <strong>Dernière étape :</strong> passe voir un membre du bureau pour régler'+(sig.p!==''?' <big>'+E(eur(sig.p))+'</big>':' ta cotisation')+' '+({cb:'par carte (SumUp)',chq:'par chèque',esp:'en espèces'}[sig.py]||'')+'.')+'</div>'+
    (sig.pt?'<p style="font-size:1.1rem;margin-top:1rem">🎁 <strong>Ton patch de bienvenue t’attend !</strong><br>Passe le récupérer auprès du bureau.</p>':'')+'</div>'
    :'<div class="ok"><b>🎉</b><h2>C’est envoyé !</h2><p>Merci '+E(pr)+'. Ta demande d’adhésion est bien arrivée chez le bureau.</p><p><strong>Dernière étape :</strong> passe voir le bureau pour régler ta cotisation et signer ton bulletin. Tout sera déjà rempli.</p></div>';
   box.hidden=false;window.scrollTo(0,0);fxBoom();
