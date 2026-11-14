@@ -29,6 +29,15 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--ac)}
 .go[disabled]{opacity:.6}
 .mut{color:var(--mut);font-size:.85rem}
 .err{color:#c0392b;font-weight:700;margin-top:.6rem}
+.paper{background:#fff;color:#1a1a1a;border-radius:12px;padding:14px 14px 10px;border:1px solid var(--line);max-height:52vh;overflow:auto;font-size:.88rem;line-height:1.4;-webkit-overflow-scrolling:touch}
+.paper .ti{font-weight:900;text-align:center;border:2px solid #1a1a1a;padding:8px;margin:0 0 10px;text-transform:uppercase}
+.paper .ar{font-weight:800;text-decoration:underline;margin:.7rem 0 .2rem}.paper p{margin:.25rem 0}.paper ul{margin:.2rem 0 .2rem 1.1rem;padding:0}
+.bu{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;border-top:1px solid #ddd;padding-top:10px}.bu div{flex:1 1 30%;min-width:90px;text-align:center;font-size:.8rem}.bu u{display:block}.bu img{max-width:100%;height:42px;object-fit:contain}
+.me{border:1.5px solid #1a1a1a;border-radius:8px;padding:8px 10px;margin-top:12px;font-size:.85rem}.me b{font-weight:800}
+.pay{margin:.9rem 0 .2rem;padding:.75rem .9rem;border-radius:14px;background:linear-gradient(135deg,rgba(124,58,237,.12),rgba(219,39,119,.12));font-weight:700}
+.pay big{font-size:1.5rem;font-weight:900;color:var(--ac)}
+#sgc{width:100%;height:auto;aspect-ratio:760/260;background:#fff;border:2px dashed #c4b5fd;border-radius:14px;touch-action:none;display:block;margin-top:.3rem}
+.lnk{background:none;border:0;color:var(--ac);font:inherit;font-weight:700;padding:.4rem 0;cursor:pointer}
 .ok{text-align:center;padding:10px 4px}.ok b{font-size:3rem;display:block}
 
 /* animations (2.82.25) */
@@ -66,7 +75,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--ac)}
 <button class="go" id="go">✅ Envoyer ma demande d’adhésion</button>
 <p class="err" id="er" hidden></p>
 <p class="mut" style="margin:.8rem 0 0">🔒 Tes informations sont chiffrées sur ton téléphone : seuls les organisateurs peuvent les lire. Elles servent uniquement à l’amicale.</p>
-</div></div>
+</div><div class="card" id="s2" hidden></div></div>
 <script>
 (function(){
 var API='https://agendam-famille.dam-cigogne.workers.dev';
@@ -82,7 +91,10 @@ var GR=['Soldat','1re classe','Caporal','Caporal-chef','Sergent','Sergent-chef',
 var CT=[['actif','Actif'],['reserv','Réserviste'],['honneur','Membre d’honneur'],['bienf','Bienfaiteur'],['ancien','Ancien'],['autre','Autre']];
 $('gr').innerHTML='<option value="">— choisis —</option>'+GR.map(function(g){return '<option>'+g+'</option>'}).join('');
 $('ct').innerHTML=CT.map(function(c){return '<option value="'+c[0]+'">'+c[1]+'</option>'}).join('');
-var AM='';
+var AM='',DOC=null,PY='';
+/* 2.82.29 : le bulletin à lire et signer en ligne (publié par le bureau) */
+try{crypto.subtle.digest('SHA-256',new TextEncoder().encode('agd-aqpub:'+ID)).then(function(hb){var pid=Array.prototype.map.call(new Uint8Array(hb).slice(0,16),function(b){return ('0'+b.toString(16)).slice(-2)}).join('');
+ return fetch(API+'/pub/'+pid+'?t='+Date.now())}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.d&&j.d.t==='adh'){DOC=j.d;$('go').textContent='➡️ Continuer : mon bulletin à signer';var p=document.querySelector('#c .mut');if(p)p.textContent='Remplis tes informations, puis lis ton bulletin et signe-le avec le doigt. Ensuite tu règles ta cotisation (virement ou au bureau).'}}).catch(function(){})}catch(e){}
 document.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
  if(b.parentNode&&b.parentNode.id==='am'){AM=b.dataset.v;[].forEach.call($('am').children,function(x){x.classList.toggle('on',x===b)})}});
 function err(t){var e=$('er');e.textContent=t;e.hidden=!t}
@@ -92,8 +104,51 @@ $('go').addEventListener('click',function(){
  if(!g('gr')){err('Choisis ton grade (ou « Civil », « Extérieur »).');return}
  if(!tl&&!g('ml')){err('Laisse un téléphone ou un mail pour qu’on puisse te joindre.');return}
  if(!$('ok').checked){err('Coche la case d’accord en bas pour envoyer.');return}
- err('');var bt=$('go');bt.disabled=true;bt.textContent='Envoi…';
- var data={t:'ad',nm:nm,pr:pr,gr:g('gr'),sv:g('sv'),ct:g('ct'),tl:tl,ml:g('ml'),an:AM,rg:g('rg'),mo:g('mo'),ok:1,v:1};
+ err('');var data={t:'ad',nm:nm,pr:pr,gr:g('gr'),sv:g('sv'),ct:g('ct'),tl:tl,ml:g('ml'),an:AM,rg:g('rg'),mo:g('mo'),ok:1,v:1};
+ if(DOC){step2(data);return}
+ send(data,$('go'),'✅ Envoyer ma demande d’adhésion',null);
+});
+var E=function(t){return String(t==null?'':t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+var eur=function(v){var n=+String(v).replace(',','.');return isFinite(n)?(n%1?n.toFixed(2).replace('.',','):String(n))+' €':v};
+function price(d){var p='';if(d.ct&&d.ct!=='actif'&&DOC.tc&&DOC.tc[d.ct]!=null)p=DOC.tc[d.ct];else if(DOC.tg&&DOC.tg[d.gr]!=null)p=DOC.tg[d.gr];else p=DOC.pd||'';return p}
+function regHtml(d){var h='';if(DOC.ti)h+='<div class="ti">'+E(DOC.ti).replace(/\n/g,'<br>')+'</div>';
+ var tx=String(DOC.tx||'').trim();
+ if(tx){var ul=null,fl=function(){if(ul){h+='<ul>'+ul+'</ul>';ul=null}};tx.split(/\r?\n/).forEach(function(l){var t=l.trim();if(/^\[page\]$/i.test(t)){fl();return}if(!t){fl();h+='<div style="height:6px"></div>';return}var li=t.match(/^[-•–]\s*(.*)$/);if(li){ul=(ul||'')+'<li>'+E(li[1])+'</li>';return}fl();h+=/^article\b/i.test(t)?'<p class="ar">'+E(t)+'</p>':'<p>'+E(t)+'</p>'});fl()}
+ else{h+='<p>'+E(String(DOC.intro||'').replace(/\{nom\}/g,d.pr+' '+d.nm).replace(/\{grade\}/g,d.gr).replace(/\{asso\}/g,DOC.g||'l’amicale').replace(/\{annee\}/g,String(new Date().getFullYear())))+'</p>';var cl=String(DOC.cl||'').split(/\r?\n/).filter(Boolean);if(cl.length)h+='<ul>'+cl.map(function(x){return '<li>'+E(x)+'</li>'}).join('')+'</ul>'}
+ var bu=(DOC.bu||[]).slice().sort(function(a,b){return (a.l-b.l)||(a.c-b.c)});if(bu.length)h+='<div class="bu">'+bu.map(function(x){return '<div><u>'+E(x.r)+'</u>'+E(x.n)+(x.s&&/^data:image\/(png|jpeg);base64,/.test(x.s)?'<br><img src="'+x.s+'" alt="">':'')+'</div>'}).join('')+'</div>';
+ h+='<div class="me">Grade : <b>'+E(d.gr)+'</b> · Prénom : <b>'+E(d.pr)+'</b> · Nom : <b>'+E(String(d.nm).toUpperCase())+'</b>'+(d.sv?' · Service : <b>'+E(d.sv)+'</b>':'')+'<br>'+E(DOC.ac||'Accepte le présent document en tant qu’adhérent.')+'<br>Pris connaissance le : <b>'+new Date().toLocaleDateString('fr-FR')+'</b></div>';
+ if(DOC.rgpd)h+='<p style="font-size:.75rem;color:#555;margin-top:8px"><i>'+E(DOC.rgpd)+'</i></p>';
+ return h}
+var ST=[],cur=null;
+function step2(d){var p=price(d);PY='';$('c').hidden=true;var s=$('s2');s.hidden=false;
+ s.innerHTML='<h2>📝 Mon bulletin '+E(DOC.sa||'')+'</h2><p class="mut" style="margin:-.2rem 0 .5rem">Lis-le (fais défiler), puis signe en bas avec le doigt.</p><div class="paper">'+regHtml(d)+'</div>'+
+  '<div class="pay">💶 Ma cotisation : '+(p!==''?'<big>'+E(eur(p))+'</big><br><small style="font-weight:600;opacity:.8">Le bureau vérifie le montant et te prévient s’il faut le corriger.</small>':'<span>le bureau t’indiquera le montant</span>')+'</div>'+
+  '<label>Je règle par</label><div class="seg" id="py"><button type="button" data-v="vir">🏦 Virement</button><button type="button" data-v="bur">🤝 Au bureau</button></div><p class="mut" id="pyx" style="margin:.4rem 0 0"></p>'+
+  '<label style="display:flex;gap:.6rem;align-items:flex-start;font-weight:400;margin-top:1rem"><input type="checkbox" id="lu" style="width:22px;height:22px;flex:none;margin:0"><span>J’ai lu le règlement et je l’accepte.</span></label>'+
+  '<label>✍️ Ma signature</label><canvas id="sgc" width="760" height="260"></canvas><button type="button" class="lnk" id="sgx">🧽 Effacer et recommencer</button>'+
+  '<button class="go" id="go2">✍️ Signer et envoyer</button><p class="err" id="er2" hidden></p><button type="button" class="lnk" id="back">← Modifier mes informations</button>';
+ window.scrollTo(0,0);
+ var cv=$('sgc'),g=cv.getContext('2d');g.lineWidth=4.5;g.lineCap='round';g.lineJoin='round';g.strokeStyle='#111';ST=[];
+ var pt=function(e){var r=cv.getBoundingClientRect(),t=e.touches?e.touches[0]:e;return [Math.max(0,Math.min(759,(t.clientX-r.left)*760/r.width)),Math.max(0,Math.min(259,(t.clientY-r.top)*260/r.height))]};
+ var down=function(e){e.preventDefault();var x2=$('er2');if(x2)x2.hidden=true;var q=pt(e);cur=[q];ST.push(cur);g.beginPath();g.moveTo(q[0],q[1]);g.lineTo(q[0]+.1,q[1]+.1);g.stroke()};
+ var move=function(e){if(!cur)return;e.preventDefault();var q=pt(e);cur.push(q);g.lineTo(q[0],q[1]);g.stroke()};
+ var up=function(){cur=null};
+ cv.addEventListener('pointerdown',down);cv.addEventListener('pointermove',move);window.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
+ $('sgx').onclick=function(){g.clearRect(0,0,760,260);ST=[]};
+ $('back').onclick=function(){s.hidden=true;$('c').hidden=false;window.scrollTo(0,0)};
+ $('py').onclick=function(e){var b=e.target.closest('button');if(!b)return;PY=b.dataset.v;[].forEach.call($('py').children,function(x){x.classList.toggle('on',x===b)});
+  $('pyx').textContent=PY==='vir'?'Fais ton virement en indiquant « Adhésion '+String(d.nm).toUpperCase()+' '+d.pr+' ». Demande le RIB à un membre du bureau.':'Passe voir un membre du bureau : espèces, chèque ou carte.'};
+ $('go2').onclick=function(){var e2=function(t){var x=$('er2');x.textContent=t;x.hidden=!t};
+  if(!PY){e2('Choisis comment tu règles : virement ou au bureau.');return}
+  if(!$('lu').checked){e2('Coche « J’ai lu le règlement et je l’accepte ».');return}
+  var n=0;ST.forEach(function(x){n+=x.length});if(n<8){e2('Signe dans le cadre avec ton doigt.');return}
+  var d2={};for(var k in d)d2[k]=d[k];d2.py=PY;d2.pa=String(p);d2.sa=DOC.sa||'';d2.v=2;
+  var tol=2.5,ok=false;for(var i=0;i<14;i++){d2.sg=enc(tol);if(new TextEncoder().encode(JSON.stringify(d2)).length<=2750){ok=true;break}tol*=1.35}
+  if(!ok){e2('Ta signature est trop longue à envoyer : recommence-la un peu plus simple.');return}
+  e2('');send(d2,$('go2'),'✍️ Signer et envoyer',{p:p,py:PY,pt:DOC.pt,nm:d.nm,pr:d.pr})};
+}
+function enc(tol){var A='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';return ST.map(function(st){var out='',lx=-99,ly=-99;st.forEach(function(q,i){if(i&&i<st.length-1&&Math.abs(q[0]-lx)+Math.abs(q[1]-ly)<tol)return;lx=q[0];ly=q[1];var v=(Math.round(q[0]/2)<<8)|Math.round(q[1]/2);out+=A[(v>>12)&63]+A[(v>>6)&63]+A[v&63]});return out}).filter(Boolean).join('.')}
+function send(data,bt,lab,sig){bt.disabled=true;bt.textContent='Envoi…';var pr=data.pr;
  var S=crypto.subtle,kp,ej;
  S.generateKey({name:'ECDH',namedCurve:'P-256'},true,['deriveBits']).then(function(k){kp=k;return S.exportKey('jwk',k.publicKey)}).then(function(j){ej=j;
   return S.importKey('jwk',{kty:'EC',crv:'P-256',x:X,y:Y,ext:true},{name:'ECDH',namedCurve:'P-256'},false,[])}).then(function(pub){
@@ -103,9 +158,14 @@ $('go').addEventListener('click',function(){
   var iv=crypto.getRandomValues(new Uint8Array(12));return S.encrypt({name:'AES-GCM',iv:iv},key,new TextEncoder().encode(JSON.stringify(data))).then(function(c){return {e:{x:ej.x,y:ej.y},iv:b64u(iv),c:b64u(c)}})}).then(function(body){
   return fetch(API+'/in/'+ID,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})}).then(function(r){
   if(!r.ok)return r.json().then(function(j){throw new Error(j&&j.error||('erreur '+r.status))},function(){throw new Error('erreur '+r.status)});
-  $('c').innerHTML='<div class="ok"><b>🎉</b><h2>C’est envoyé !</h2><p>Merci '+pr.replace(/[<>&"]/g,'')+'. Ta demande d’adhésion est bien arrivée chez le bureau.</p><p><strong>Dernière étape :</strong> passe voir le bureau pour régler ta cotisation et signer ton bulletin. Tout sera déjà rempli.</p></div>';fxBoom();
- }).catch(function(e){bt.disabled=false;bt.textContent='✅ Envoyer ma demande d’adhésion';err('Envoi impossible : '+(e&&e.message||'vérifie ta connexion')+'. Réessaie dans un instant.')});
-});
+  var box=sig?$('s2'):$('c');
+  box.innerHTML=sig?'<div class="ok"><b>🎉</b><h2>Bienvenue à l’amicale !</h2><p>Merci '+E(pr)+'. Ton bulletin signé est bien arrivé chez le bureau.</p>'+
+   '<div class="pay" style="text-align:left">'+(sig.py==='vir'?'🏦 <strong>Dernière étape :</strong> fais ton virement'+(sig.p!==''?' de <big>'+E(eur(sig.p))+'</big>':'')+' en indiquant « Adhésion '+E(String(sig.nm).toUpperCase()+' '+sig.pr)+' ». Demande le RIB à un membre du bureau.':'🤝 <strong>Dernière étape :</strong> passe voir un membre du bureau pour régler'+(sig.p!==''?' <big>'+E(eur(sig.p))+'</big>':' ta cotisation')+' (espèces, chèque ou carte).')+'</div>'+
+   (sig.pt?'<p style="font-size:1.1rem;margin-top:1rem">🎁 <strong>Ton patch de bienvenue t’attend !</strong><br>Passe le récupérer auprès du bureau.</p>':'')+'</div>'
+   :'<div class="ok"><b>🎉</b><h2>C’est envoyé !</h2><p>Merci '+E(pr)+'. Ta demande d’adhésion est bien arrivée chez le bureau.</p><p><strong>Dernière étape :</strong> passe voir le bureau pour régler ta cotisation et signer ton bulletin. Tout sera déjà rempli.</p></div>';
+  box.hidden=false;window.scrollTo(0,0);fxBoom();
+ }).catch(function(e){bt.disabled=false;bt.textContent=lab;var m='Envoi impossible : '+(e&&e.message||'vérifie ta connexion')+'. Réessaie dans un instant.';if(sig){var x=$('er2');x.textContent=m;x.hidden=false}else err(m)});
+}
 })();
 </script>
 <script>
