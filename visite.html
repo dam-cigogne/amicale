@@ -200,7 +200,7 @@ const C=[
 ['f6b-ql-carte','card','⏰ La date de fin des inscriptions','Dans la fiche, sous les QR codes : « Mettre une date limite ». Après la date, la pancarte affiche « Inscriptions closes ».'],
 ['f6c-ql-affiche','band','En bandeau rouge sur l’affiche','« Inscriptions avant le… » en haut de l’affiche, du menu et du PDF. On peut le déplacer, ou le cacher.'],
 ['f6e-ql-pancarte','ql','Ça clignote les 7 derniers jours','Sur la pancarte : « Fin des inscriptions J-3 ». La page d’inscription l’affiche aussi.'],
-['f6d-ql-relance','msg','⏰ Relancer les non-inscrits','Un bouton coche tout seul les amicalistes pas encore inscrits et prépare le rappel avec le lien. À plusieurs : ✉️ Mail en copie cachée, ou 🟢 WhatsApp dans le groupe de l’amicale.'],
+['f6d-ql-relance','msg','⏰ Relancer les non-inscrits','Un bouton coche tout seul les amicalistes pas encore inscrits et prépare le rappel avec le lien. À plusieurs : ✉️ Mail en copie cachée, ou 🟢 WhatsApp dans le groupe de l’amicale. Une case ajoute aussi le lien d’adhésion à l’amicale (« Pas encore adhérent ? »).'],
 ['f6f-page-anim','ql','✨ Une page qui donne envie','Quand on scanne le QR : le décor change selon la fête (neige à Noël, 🍇 au Beaujolais, 🎖️ à la Saint-Éloi, 🥖 au casse-croûte…), la date limite bouge, et des confettis à l’envoi.'],
   ['f5-qr-event','pend','📥 À valider','Les inscriptions arrivent ici (et 🔔 notification). <b>✅ Ajouter</b> : l’appli vérifie d’abord (faute dans le nom, amicaliste ou pas, nouveau téléphone ou mail à reporter sur sa fiche), puis la personne rejoint les inscrits, <b>avec ses accompagnants et ses enfants</b>. 📜 Toutes les inscriptions reçues : rien ne se perd.'],
   ['f9-qr-menu','qm','🍽 Le QR du menu','Onglet 📲 QR codes : <b>QR du menu (menu + prix)</b>, avec sa forme, sa taille et son texte. On le pose sur l’affiche, à côté du QR d’inscription.'],
@@ -374,7 +374,7 @@ C.splice(k>=0?k+1:6,0,{em:'📲',t:'L’adhésion par QR code',p:'On scanne, on 
 ['h8d-lnk-groupe','btn','À plusieurs d’un coup','<b>☑ Sélectionner</b>, on coche (ou « Tout »), puis <b>📲 Envoyer un lien</b> : un SMS groupé, ou un mail en copie cachée.'],
 ['h9-ra-bouton','btn','⏰ Relancer l’adhésion','Sous le QR d’adhésion : « Relancer ceux qui n’ont pas adhéré ». Le chiffre = ceux qui ne sont pas encore à jour.'],
 ['h9b-ra-choix','ch','Relancer qui ?','Les amicalistes pas à jour de leur cotisation, les non-amicalistes connus, ou les deux. L’appli les coche toute seule.'],
-['h9c-ra-msg','hk','🎉 Une phrase d’accroche','Pour donner envie : soirées, repas, cadeaux… Tu la modifies comme tu veux, l’appli s’en souvient.'],
+['h9c-ra-msg','hk','🎉 Une phrase d’accroche','Le <b>début du message</b> (« restent encore ouvertes », « plus que 15 jours »…) et la phrase pour donner envie se modifient, l’appli s’en souvient. Ta signature ajoute toute seule ton titre (« Président de l’Amicale … »).'],
 ['h9d-ra-envoi','cpn','En SMS groupé','« 📋 Copier les numéros » : tous les numéros d’un coup. Plus discret : ✉️ Mail en copie cachée.'],
 ['h9e-ra-numeros','st','Coller, puis coller','Dans Messages : colle les numéros dans « À : », reviens copier le message, colle-le. Envoyé !']]})}
 const Q=[];C.forEach((c,ci)=>{Q.push({card:c,ci});(c.s||[]).forEach(s=>Q.push({ci,img:s[0],mk:s[1],t:s[2],p:s[3]}))});Q.push({card:FIN,fin:1,ci:C.length});
