@@ -51,9 +51,9 @@ input:focus,textarea:focus{outline:none;border-color:var(--ac)}
 .sl{margin:.9rem 0 0;padding:.8rem;border:1.5px solid var(--line);border-radius:14px}
 .sl h3{margin:0 0 .3rem;font-size:1rem}
 .cs{margin:.6rem 0 .1rem;font-weight:800;font-size:.92rem}
-.op{display:block;width:100%;text-align:left;margin:.3rem 0 0;padding:.65rem .8rem;border-radius:12px;border:1.5px solid var(--line);background:transparent;color:var(--tx);font:inherit;cursor:pointer}
-.op.on{background:var(--ac);border-color:var(--ac);color:#fff;font-weight:700}
-.op.no{color:var(--mut);font-size:.9rem}.op.no.on{color:#fff}
+.op{display:flex;align-items:center;gap:.7rem;width:100%;text-align:left;margin:.3rem 0 0;padding:.65rem .8rem;border-radius:12px;border:1.5px solid var(--line);background:transparent;color:var(--tx);font:inherit;cursor:pointer}
+.bx{flex:none;width:1.5rem;height:1.5rem;border:2px solid var(--mut);border-radius:7px;display:inline-flex;align-items:center;justify-content:center;font-size:1.05rem;line-height:1;color:transparent}.op.on{border-color:var(--ac);background:rgba(124,58,237,.12);font-weight:700}.op.on .bx{background:var(--ac);border-color:var(--ac);color:#fff}
+.op.no{color:var(--mut);font-size:.9rem}.op.no.on{color:var(--tx)}
 .cf{position:fixed;top:-12px;width:9px;height:14px;z-index:60;pointer-events:none;border-radius:2px;animation:fxCf 2.6s cubic-bezier(.3,.6,.5,1) forwards}@keyframes fxCf{to{transform:translate3d(var(--dx),105vh,0) rotate(var(--r));opacity:.9}}
 </style>
 </head>
@@ -86,7 +86,7 @@ var CH=S0.map(function(_,i){var r=(SV.c||[])[i];return TP.map(function(_,c){retu
 var NM=S0.map(function(s,i){return (SV.n&&SV.n[i]!=null)?SV.n[i]:s.n});
 function draw(){var o='<p style="margin:0 0 .2rem">Bonjour'+(info.n?' <b>'+esc(String(info.n).split(' ').slice(-1)[0])+'</b>':'')+' ! Choisis un plat pour chaque personne'+(na+ne>1?' ('+na+' adulte'+(na>1?'s':'')+(ne?' + '+ne+' enfant'+(ne>1?'s':''):'')+')':'')+'.</p>';
  S0.forEach(function(s,i){o+='<div class="sl"><h3>'+(i===0&&s.k==='a'?'👤 '+esc(NM[i]||'Toi'):(s.k==='a'?'👤 Adulte '+(i+1):'🧒 Enfant '+(i-na+1)))+'</h3>'+(i===0&&s.k==='a'?'':'<input data-nm="'+i+'" maxlength="30" placeholder="Prénom (facultatif)" value="'+esc(NM[i])+'">');
-  TP.forEach(function(t,c){o+='<div class="cs">'+esc(t.l)+'</div>';(t.o||[]).forEach(function(x,k){o+='<button type="button" class="op'+(CH[i][c]===k?' on':'')+'" data-i="'+i+'" data-c="'+c+'" data-k="'+k+'">'+esc(x)+'</button>'});o+='<button type="button" class="op no'+(CH[i][c]===-1?' on':'')+'" data-i="'+i+'" data-c="'+c+'" data-k="-1">Je n’en prends pas</button>'});o+='</div>'});
+  TP.forEach(function(t,c){o+='<div class="cs">'+esc(t.l)+'</div>';(t.o||[]).forEach(function(x,k){o+='<button type="button" class="op'+(CH[i][c]===k?' on':'')+'" data-i="'+i+'" data-c="'+c+'" data-k="'+k+'"><span class="bx">✓</span><span>'+esc(x)+'</span></button>'});o+='<button type="button" class="op no'+(CH[i][c]===-1?' on':'')+'" data-i="'+i+'" data-c="'+c+'" data-k="-1"><span class="bx">✓</span><span>Je n’en prends pas</span></button>'});o+='</div>'});
  $('f').innerHTML=o}
 draw();
 document.addEventListener('input',function(e){var t=e.target;if(t.dataset&&t.dataset.nm!=null)NM[+t.dataset.nm]=t.value});
