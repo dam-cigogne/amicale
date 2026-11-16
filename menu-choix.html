@@ -101,7 +101,7 @@ function err(t){var e=$('er');e.textContent=t;e.hidden=!t}
 $('go').addEventListener('click',function(){
  for(var i=0;i<CH.length;i++)for(var c=0;c<TP.length;c++)if(CH[i][c]===null){err('Il manque un choix : '+(i===0&&S0[0].k==='a'?'toi':(NM[i]||(S0[i].k==='a'?'adulte '+(i+1):'enfant')))+' · '+TP[c].l+'.');return}
  err('');var bt=$('go');bt.disabled=true;bt.textContent='Envoi…';
- var data={k:'mn',pid:GEN?'':info.i,gn:GEN?GN:undefined,s:info.s||'',L:S0.map(function(s,i){return {n:String(i===0&&s.k==='a'?'':NM[i]||'').trim().slice(0,30),c:CH[i]}}),v:1};
+ var data={k:'mn',pid:GEN?'':info.i,gn:GEN?GN:undefined,na:na,ne:ne,s:info.s||'',L:S0.map(function(s,i){return {n:String(i===0&&s.k==='a'?'':NM[i]||'').trim().slice(0,30),c:CH[i]}}),v:1};
  var S=crypto.subtle,kp,ej;
  S.generateKey({name:'ECDH',namedCurve:'P-256'},true,['deriveBits']).then(function(k){kp=k;return S.exportKey('jwk',k.publicKey)}).then(function(j){ej=j;
   return S.importKey('jwk',{kty:'EC',crv:'P-256',x:X,y:Y,ext:true},{name:'ECDH',namedCurve:'P-256'},false,[])}).then(function(pub){
