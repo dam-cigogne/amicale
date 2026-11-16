@@ -74,20 +74,26 @@ function ub64u(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=
 var h=(location.hash||'').slice(1).split('.'),ID=h[0]||'',X=h[1]||'',Y=h[2]||'',info={};
 try{info=JSON.parse(new TextDecoder().decode(ub64u(h[3]||'')))}catch(e){}
 var TP=Array.isArray(info.tp)?info.tp:[];
-if(!/^[0-9a-f]{32}$/.test(ID)||X.length<40||Y.length<40||!TP.length||!info.i){$('c').innerHTML='<h2>Lien incomplet</h2><p>Ce lien n’est pas complet. Demande-le à nouveau à l’organisateur.</p>';return}
+if(!/^[0-9a-f]{32}$/.test(ID)||X.length<40||Y.length<40||!TP.length||!(info.i||info.gen)){$('c').innerHTML='<h2>Lien incomplet</h2><p>Ce lien n’est pas complet. Demande-le à nouveau à l’organisateur.</p>';return}
 if(info.g)$('g').textContent=info.g;
 if(info.t){$('t').textContent=info.t;document.title='Choisis ton menu · '+info.t}
 var dd='';try{if(info.d){var D=new Date(info.d+'T12:00:00');dd=D.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});dd=dd.charAt(0).toUpperCase()+dd.slice(1)}}catch(e){}
 $('w').textContent=[dd?'📅 '+dd:'',info.p?'📍 '+info.p:''].filter(Boolean).join('  ·  ');
 var na=Math.max(0,Math.min(12,+info.a||0)),ne=Math.max(0,Math.min(12,+info.e||0));if(na+ne<1)na=1;if(na+ne>12)ne=Math.max(0,12-na);
-var SK='agd-mn-'+info.i,SV={};try{SV=JSON.parse(localStorage.getItem(SK)||'{}')||{}}catch(e){}
-var S0=[];for(var i=0;i<na;i++)S0.push({k:'a',n:i===0?String(info.n||''):''});for(var j=0;j<ne;j++)S0.push({k:'e',n:''});
-var CH=S0.map(function(_,i){var r=(SV.c||[])[i];return TP.map(function(_,c){return r&&typeof r[c]==='number'?r[c]:null})});
-var NM=S0.map(function(s,i){return (SV.n&&SV.n[i]!=null)?SV.n[i]:s.n});
-function draw(){var o='<p style="margin:0 0 .2rem">Bonjour'+(info.n?' <b>'+esc(String(info.n).split(' ').slice(-1)[0])+'</b>':'')+' ! Choisis un plat pour chaque personne'+(na+ne>1?' ('+na+' adulte'+(na>1?'s':'')+(ne?' + '+ne+' enfant'+(ne>1?'s':''):'')+')':'')+'.</p>';
+var GEN=!!info.gen,GN='',SK='agd-mn-'+(GEN?'g'+ID:info.i),SV={};try{SV=JSON.parse(localStorage.getItem(SK)||'{}')||{}}catch(e){}
+var S0,CH,NM;
+function init(){S0=[];for(var i=0;i<na;i++)S0.push({k:'a',n:i===0?String(GEN?GN:info.n||''):''});for(var j=0;j<ne;j++)S0.push({k:'e',n:''});
+CH=S0.map(function(_,i){var r=(SV.c||[])[i];return TP.map(function(_,c){return r&&typeof r[c]==='number'?r[c]:null})});
+NM=S0.map(function(s,i){return (i===0&&GEN)?GN:((SV.n&&SV.n[i]!=null)?SV.n[i]:s.n)})}
+if(GEN){na=1;ne=0;try{GN=SV.gn||'';if(SV.na)na=+SV.na;if(SV.ne)ne=+SV.ne}catch(e){}}
+init();
+function draw(){if(GEN&&!GN){drawId();return}var o='<p style="margin:0 0 .2rem">Bonjour'+((info.n||GN)?' <b>'+esc(String(info.n||GN).split(' ').slice(-1)[0])+'</b>':'')+' ! Choisis un plat pour chaque personne'+(na+ne>1?' ('+na+' adulte'+(na>1?'s':'')+(ne?' + '+ne+' enfant'+(ne>1?'s':''):'')+')':'')+'.</p>';
  S0.forEach(function(s,i){o+='<div class="sl"><h3>'+(i===0&&s.k==='a'?'👤 '+esc(NM[i]||'Toi'):(s.k==='a'?'👤 Adulte '+(i+1):'🧒 Enfant '+(i-na+1)))+'</h3>'+(i===0&&s.k==='a'?'':'<input data-nm="'+i+'" maxlength="30" placeholder="Prénom (facultatif)" value="'+esc(NM[i])+'">');
   TP.forEach(function(t,c){o+='<div class="cs">'+esc(t.l)+'</div>';(t.o||[]).forEach(function(x,k){o+='<button type="button" class="op'+(CH[i][c]===k?' on':'')+'" data-i="'+i+'" data-c="'+c+'" data-k="'+k+'"><span class="bx">✓</span><span>'+esc(x)+'</span></button>'});o+='<button type="button" class="op no'+(CH[i][c]===-1?' on':'')+'" data-i="'+i+'" data-c="'+c+'" data-k="-1"><span class="bx">✓</span><span>Je n’en prends pas</span></button>'});o+='</div>'});
  $('f').innerHTML=o}
+function drawId(){$('go').style.display='none';$('f').innerHTML='<p style="margin:0 0 .4rem"><b>Qui es-tu ?</b> Écris ton nom comme à l’inscription, pour que ton choix soit rangé au bon endroit.</p><label>Nom et prénom</label><input id="gn" maxlength="40" placeholder="DUPONT Jean" autocomplete="name"><div class="row"><div><label>Adultes <small>(toi compris)</small></label><div class="num"><button type="button" data-st="a-">−</button><input id="gna" value="'+na+'" readonly><button type="button" data-st="a+">+</button></div></div><div><label>Enfants</label><div class="num"><button type="button" data-st="e-">−</button><input id="gne" value="'+ne+'" readonly><button type="button" data-st="e+">+</button></div></div></div><button type="button" class="go" id="gnx" style="display:block">Continuer</button>'}
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-st]');if(b){var k=b.dataset.st;if(k==='a-')na=Math.max(1,na-1);if(k==='a+')na=Math.min(12-ne,na+1);if(k==='e-')ne=Math.max(0,ne-1);if(k==='e+')ne=Math.min(12-na,ne+1);$('gna').value=na;$('gne').value=ne;return}
+ if(e.target.id==='gnx'){var v=($('gn').value||'').trim();if(v.length<3){err('Écris ton nom et ton prénom.');return}err('');GN=v;try{localStorage.setItem(SK,JSON.stringify({gn:GN,na:na,ne:ne,c:SV.c,n:SV.n}))}catch(x){}init();$('go').style.display='';draw()}});
 draw();
 document.addEventListener('input',function(e){var t=e.target;if(t.dataset&&t.dataset.nm!=null)NM[+t.dataset.nm]=t.value});
 document.addEventListener('click',function(e){var b=e.target.closest('.op');if(!b)return;CH[+b.dataset.i][+b.dataset.c]=+b.dataset.k;var y=window.scrollY;draw();window.scrollTo(0,y)});
@@ -95,7 +101,7 @@ function err(t){var e=$('er');e.textContent=t;e.hidden=!t}
 $('go').addEventListener('click',function(){
  for(var i=0;i<CH.length;i++)for(var c=0;c<TP.length;c++)if(CH[i][c]===null){err('Il manque un choix : '+(i===0&&S0[0].k==='a'?'toi':(NM[i]||(S0[i].k==='a'?'adulte '+(i+1):'enfant')))+' · '+TP[c].l+'.');return}
  err('');var bt=$('go');bt.disabled=true;bt.textContent='Envoi…';
- var data={k:'mn',pid:info.i,s:info.s||'',L:S0.map(function(s,i){return {n:String(i===0&&s.k==='a'?'':NM[i]||'').trim().slice(0,30),c:CH[i]}}),v:1};
+ var data={k:'mn',pid:GEN?'':info.i,gn:GEN?GN:undefined,s:info.s||'',L:S0.map(function(s,i){return {n:String(i===0&&s.k==='a'?'':NM[i]||'').trim().slice(0,30),c:CH[i]}}),v:1};
  var S=crypto.subtle,kp,ej;
  S.generateKey({name:'ECDH',namedCurve:'P-256'},true,['deriveBits']).then(function(k){kp=k;return S.exportKey('jwk',k.publicKey)}).then(function(j){ej=j;
   return S.importKey('jwk',{kty:'EC',crv:'P-256',x:X,y:Y,ext:true},{name:'ECDH',namedCurve:'P-256'},false,[])}).then(function(pub){
@@ -105,7 +111,7 @@ $('go').addEventListener('click',function(){
   var iv=crypto.getRandomValues(new Uint8Array(12));return S.encrypt({name:'AES-GCM',iv:iv},key,new TextEncoder().encode(JSON.stringify(data))).then(function(c){return {e:{x:ej.x,y:ej.y},iv:b64u(iv),c:b64u(c)}})}).then(function(body){
   return fetch(API+'/in/'+ID,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})}).then(function(r){
   if(!r.ok)return r.json().then(function(j){throw new Error(j&&j.error||('erreur '+r.status))},function(){throw new Error('erreur '+r.status)});
-  try{localStorage.setItem(SK,JSON.stringify({c:CH,n:NM}))}catch(e){}
+  try{localStorage.setItem(SK,JSON.stringify({c:CH,n:NM,gn:GN,na:na,ne:ne}))}catch(e){}
   var rec=S0.map(function(s,i){return '<li><b>'+esc((i===0&&s.k==='a')?(NM[i]||'Toi'):(NM[i]||(s.k==='a'?'Adulte '+(i+1):'Enfant')))+'</b> : '+TP.map(function(t,c){return CH[i][c]===-1?'—':esc((t.o||[])[CH[i][c]]||'')}).join(' · ')+'</li>'}).join('');
   $('c').innerHTML='<div class="ok"><b>🎉</b><h2>C’est envoyé !</h2><p>Merci, ton choix est bien arrivé chez les organisateurs.</p></div><ul style="padding-left:1.1rem">'+rec+'</ul><p class="mut">Une erreur ? Rouvre simplement ton lien et renvoie : le dernier choix remplace le précédent.</p>';
   try{fxBoom()}catch(e){}
