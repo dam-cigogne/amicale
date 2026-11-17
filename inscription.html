@@ -21,13 +21,14 @@ body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.45 -apple-system,
 h2{margin:0 0 .6rem;font-size:1.2rem}
 label{display:block;margin:.65rem 0 .2rem;font-weight:700;font-size:.92rem}
 label small{font-weight:400;color:var(--mut)}
-input,textarea{width:100%;font:inherit;font-size:16px;padding:.7rem .8rem;border:1.5px solid var(--line);border-radius:12px;background:transparent;color:var(--tx)}
-input:focus,textarea:focus{outline:none;border-color:var(--ac)}
+input,textarea,select{width:100%;font:inherit;font-size:16px;padding:.7rem .8rem;border:1.5px solid var(--line);border-radius:12px;background:transparent;color:var(--tx)}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--ac)}
 .row{display:flex;gap:10px}.row>div{flex:1;min-width:0}
 .num{display:flex;align-items:center;gap:8px}.num button{width:44px;height:44px;border-radius:12px;border:1.5px solid var(--line);background:transparent;color:var(--tx);font-size:1.4rem;cursor:pointer}.num input{text-align:center;font-weight:800;font-size:1.15rem}
 .seg{display:flex;gap:8px;flex-wrap:wrap}.seg button{flex:1;min-width:6rem;padding:.65rem;border-radius:12px;border:1.5px solid var(--line);background:transparent;color:var(--tx);font:inherit;font-weight:700;cursor:pointer}.seg button.on{background:var(--ac);border-color:var(--ac);color:#fff}
 .go{display:block;width:100%;margin-top:1.1rem;padding:.95rem;border:0;border-radius:14px;background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;font:inherit;font-weight:800;font-size:1.08rem;cursor:pointer}
 .go[disabled]{opacity:.6}
+.gg{margin:.5rem 0 .2rem;font-size:.78rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--mut)}.gb{display:flex;flex-wrap:wrap;gap:7px}.gb button{padding:.6rem .8rem;border-radius:12px;border:1.5px solid var(--line);background:transparent;color:var(--tx);font:inherit;font-weight:700;cursor:pointer}.gb button.on{background:var(--ac);border-color:var(--ac);color:#fff}
 .mut{color:var(--mut);font-size:.85rem}
 .err{color:#c0392b;font-weight:700;margin-top:.6rem}
 .ok{text-align:center;padding:10px 4px}.ok b{font-size:3rem;display:block}
@@ -54,6 +55,7 @@ input:focus,textarea:focus{outline:none;border-color:var(--ac)}
 <div class="wrap"><div class="card" id="c">
 <h2>Je m’inscris</h2>
 <div class="row"><div><label for="nm">Nom</label><input id="nm" autocomplete="family-name" maxlength="40"></div><div><label for="pr">Prénom</label><input id="pr" autocomplete="given-name" maxlength="40"></div></div>
+<label for="gr">Grade <small>(touche le tien · civil ou extérieur : « Civil » / « Extérieur »)</small></label><div id="gr"></div>
 <div class="row"><div><label>Adultes</label><div class="num"><button type="button" data-n="na" data-d="-1">−</button><input id="na" inputmode="numeric" value="1"><button type="button" data-n="na" data-d="1">+</button></div></div>
 <div><label>Enfants</label><div class="num"><button type="button" data-n="ne" data-d="-1">−</button><input id="ne" inputmode="numeric" value="0"><button type="button" data-n="ne" data-d="1">+</button></div></div></div>
 <label for="tl">Téléphone</label><input id="tl" type="tel" autocomplete="tel" maxlength="20">
@@ -81,18 +83,25 @@ $('w').textContent=[dd?'📅 '+dd:'',info.p?'📍 '+info.p:''].filter(Boolean).j
 try{if(/^\d{4}-\d{2}-\d{2}$/.test(info.l||'')){var L=new Date(info.l+'T12:00:00'),T=new Date();T.setHours(12,0,0,0);var n=Math.round((L-T)/864e5),lt=L.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});var q=$('ql');
  if(n<0)q.innerHTML='<span class="ql cl">⚠️ Les inscriptions devaient se terminer le '+lt+'. Tu peux quand même envoyer : les organisateurs verront.</span>';
  else q.innerHTML='<span class="ql'+(n<=7?' bl':'')+'">⏰ '+(n===0?'Dernier jour pour s’inscrire !':n===1?'Inscriptions jusqu’à demain !':'Inscriptions jusqu’au '+lt+(n<=7?' (plus que '+n+' jours)':''))+'</span>'}}catch(e){}
+var GR=['Soldat','1re classe','Caporal','Caporal-chef','Sergent','Sergent-chef','Adjudant','Adjudant-chef','Major','Aspirant','Sous-lieutenant','Lieutenant','Capitaine','Commandant','Lieutenant-colonel','Colonel','Général','Civil','Civil cat. B','Civil cat. C','Extérieur'];
+var GG=[['Militaires du rang',['Soldat','1re classe','Caporal','Caporal-chef']],['Sous-officiers',['Sergent','Sergent-chef','Adjudant','Adjudant-chef','Major']],['Officiers',['Aspirant','Sous-lieutenant','Lieutenant','Capitaine','Commandant','Lieutenant-colonel','Colonel','Général']],['Civils et extérieurs',['Civil','Civil cat. B','Civil cat. C','Extérieur']]],GRV='';
+$('gr').innerHTML=GG.map(function(g){return '<div class="gg">'+g[0]+'</div><div class="gb">'+g[1].map(function(x){return '<button type="button" data-g="'+x+'">'+x+'</button>'}).join('')+'</div>'}).join('');
 var AM='';
 document.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
- if(b.dataset.n){var i=$(b.dataset.n),v=Math.max(0,Math.min(30,(parseInt(i.value,10)||0)+(+b.dataset.d)));i.value=v}
+ if(b.dataset.g){GRV=b.dataset.g;[].forEach.call($('gr').querySelectorAll('button'),function(x){x.classList.toggle('on',x===b)});err('')}
+ else if(b.dataset.n){var i=$(b.dataset.n),v=Math.max(0,Math.min(30,(parseInt(i.value,10)||0)+(+b.dataset.d)));i.value=v}
  else if(b.parentNode&&b.parentNode.id==='am'){AM=b.dataset.v;[].forEach.call($('am').children,function(x){x.classList.toggle('on',x===b)})}});
 function err(t){var e=$('er');e.textContent=t;e.hidden=!t}
 $('go').addEventListener('click',function(){
  var nm=$('nm').value.trim(),pr=$('pr').value.trim(),na=Math.max(0,Math.min(30,parseInt($('na').value,10)||0)),ne=Math.max(0,Math.min(30,parseInt($('ne').value,10)||0)),tl=$('tl').value.trim();
  if(!nm||!pr){err('Merci d’écrire ton nom et ton prénom.');return}
+ if(!GRV){err('Choisis ton grade (ou « Civil », « Extérieur »).');return}
  if(na+ne<1){err('Indique au moins une personne.');return}
  if(!tl&&!$('ml').value.trim()){err('Laisse un téléphone ou un mail pour qu’on puisse te joindre.');return}
+ if(tl&&!/^\s*(\+|00)/.test(tl)&&!/^0[1-9]\d{8}$/.test(tl.replace(/[\s.\-()]/g,''))){err('Vérifie ton numéro : 10 chiffres en commençant par 0 (exemple : 06 12 34 56 78). Si tu as oublié le 0 du début, ajoute-le.');return}
+ var ml0=$('ml').value.trim();if(ml0&&!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(ml0)){err('Vérifie ton adresse mail : elle doit ressembler à prenom@exemple.fr.');return}
  err('');var bt=$('go');bt.disabled=true;bt.textContent='Envoi…';
- var data={nm:nm,pr:pr,na:na,ne:ne,tl:tl,ml:$('ml').value.trim(),am:AM,rg:$('rg').value.trim(),mo:$('mo').value.trim(),v:1};
+ var data={nm:nm,pr:pr,na:na,ne:ne,tl:tl,ml:$('ml').value.trim(),gr:GRV,am:AM,rg:$('rg').value.trim(),mo:$('mo').value.trim(),v:1};
  var S=crypto.subtle,kp,ej;
  S.generateKey({name:'ECDH',namedCurve:'P-256'},true,['deriveBits']).then(function(k){kp=k;return S.exportKey('jwk',k.publicKey)}).then(function(j){ej=j;
   return S.importKey('jwk',{kty:'EC',crv:'P-256',x:X,y:Y,ext:true},{name:'ECDH',namedCurve:'P-256'},false,[])}).then(function(pub){
