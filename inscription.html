@@ -115,7 +115,7 @@ $('go').addEventListener('click',function(){
   return fetch(API+'/in/'+ID,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})}).then(function(r){
   if(!r.ok)return r.json().then(function(j){if(j&&j.error==='closed'){showClosed(j.cl);return}throw new Error(j&&j.error||('erreur '+r.status))},function(){throw new Error('erreur '+r.status)});
   $('c').innerHTML='<div class="ok"><b>🎉</b><h2>C’est envoyé !</h2><p>Merci '+pr.replace(/[<>&"]/g,'')+'. Ton inscription'+(info.t?' à « '+String(info.t).replace(/[<>&"]/g,'')+' »':'')+' est bien arrivée chez les organisateurs. Ils la valident et te recontactent si besoin.</p></div>';fxBoom();
- }).catch(function(e){bt.disabled=false;bt.textContent='✅ Envoyer mon inscription';err('Envoi impossible : '+(e&&e.message||'vérifie ta connexion')+'. Réessaie dans un instant.')});
+ }).catch(function(e){bt.disabled=false;bt.textContent='✅ Envoyer mon inscription';var m=String(e&&e.message||'');err(/load failed|failed to fetch|network|erreur 5|erreur 429/i.test(m)||!m?'Le serveur est momentanément saturé. Rien n’est perdu : tout ce que tu as écrit est gardé sur cette page. Réessaie dans quelques minutes (si c’est le soir, plutôt après 1 h du matin).':'Envoi impossible : '+m+'. Réessaie dans un instant.')});
 });
 })();
 </script>
