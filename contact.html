@@ -38,6 +38,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--ac)}
 .pay big{font-size:1.5rem;font-weight:900;color:var(--ac)}
 #sgc{width:100%;height:auto;aspect-ratio:760/260;background:#fff;border:2px dashed #c4b5fd;border-radius:14px;touch-action:none;display:block;margin-top:.3rem}
 .lnk{background:none;border:0;color:var(--ac);font:inherit;font-weight:700;padding:.4rem 0;cursor:pointer}
+.phs{display:flex;gap:10px;flex-wrap:wrap}.phs div{position:relative}.phs img{width:96px;height:96px;object-fit:cover;border-radius:12px;border:1.5px solid var(--line);display:block}.phs button{position:absolute;top:-8px;right:-8px;width:28px;height:28px;border-radius:50%;border:0;background:#c0392b;color:#fff;font-weight:800;cursor:pointer}
 .ok{text-align:center;padding:10px 4px}.ok b{font-size:3rem;display:block}
 
 /* animations (2.82.25) */
@@ -64,6 +65,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--ac)}
 <p class="mut" style="margin:-.2rem 0 .3rem">Ton message arrive directement au bureau de l’amicale. On te répond par mail.</p>
 <label>C’est…</label><div class="seg" id="ty"><button type="button" data-v="i" class="on">💡 Une idée</button><button type="button" data-v="q">❓ Une question</button><button type="button" data-v="p">⚠️ Un problème</button><button type="button" data-v="a">✉️ Autre</button></div>
 <label for="x">Ton message</label><textarea id="x" rows="6" maxlength="1500" placeholder="Écris ici…"></textarea>
+<label>📷 Une photo <small>(facultatif, 2 au maximum : un problème à montrer, une affiche…)</small></label><div id="phs" class="phs"></div><button type="button" class="lnk" id="phb">＋ Ajouter une photo</button><input type="file" id="phf" accept="image/*" hidden>
 <label for="nm">Ton nom et prénom <small>(conseillé, mais pas obligatoire)</small></label><input id="nm" autocomplete="name" maxlength="60">
 <label for="ml">Ton mail <small>(pour qu’on puisse te répondre)</small></label><input id="ml" type="email" autocomplete="email" maxlength="80">
 <label for="tl">Ton téléphone <small>(facultatif)</small></label><input id="tl" type="tel" autocomplete="tel" maxlength="20">
@@ -82,7 +84,13 @@ var h=(location.hash||'').slice(1).split('.'),ID=h[0]||'',X=h[1]||'',Y=h[2]||'',
 try{info=JSON.parse(new TextDecoder().decode(ub64u(h[3]||'')))}catch(e){}
 if(!/^[0-9a-f]{32}$/.test(ID)||X.length<40||Y.length<40){$('c').innerHTML='<h2>Lien incomplet</h2><p>Ce QR code ou ce lien n’est pas complet. Scanne-le à nouveau ou demande le lien au bureau.</p>';return}
 if(info.g){$('g').textContent=info.g;document.title='Contacter · '+info.g}
-var TY='i';
+var TY='i',PH=[];
+/* 2.82.143 : photo réduite sur le téléphone (1280 px, JPEG, environ 100 à 150 Ko) puis chiffrée comme le message */
+function shrink(f){return new Promise(function(ok,ko){var u=URL.createObjectURL(f),im=new Image();im.onload=function(){var mx=1280,d='',q=.72;for(var t=0;t<6;t++){var k=Math.min(1,mx/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);var g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,c.width,c.height);g.drawImage(im,0,0,c.width,c.height);d=c.toDataURL('image/jpeg',q);if(d.length<=200000)break;mx=Math.round(mx*.8);q=Math.max(.5,q-.05)}URL.revokeObjectURL(u);d.length<=230000?ok(d):ko(new Error('photo trop lourde'))};im.onerror=function(){URL.revokeObjectURL(u);ko(new Error('photo illisible'))};im.src=u})}
+function phDraw(){$('phs').innerHTML=PH.map(function(d,i){return '<div><img alt="Photo '+(i+1)+'" src="'+d+'"><button type="button" data-i="'+i+'" aria-label="Retirer la photo">✕</button></div>'}).join('');$('phb').hidden=PH.length>=2}
+$('phb').onclick=function(){$('phf').click()};
+$('phf').onchange=function(){var f=this.files&&this.files[0];this.value='';if(!f)return;$('phb').textContent='Préparation de la photo…';shrink(f).then(function(d){PH.push(d);phDraw();$('phb').textContent='＋ Ajouter une photo'},function(e){$('phb').textContent='＋ Ajouter une photo';err(e.message)})};
+$('phs').onclick=function(e){var b=e.target.closest('button');if(!b)return;PH.splice(+b.dataset.i,1);phDraw()};
 $('ty').onclick=function(e){var b=e.target.closest('button');if(!b)return;TY=b.dataset.v;[].forEach.call($('ty').children,function(x){x.classList.toggle('on',x===b)});
  $('x').placeholder=TY==='i'?'Ton idée, ta suggestion…':TY==='q'?'Ta question…':TY==='p'?'Explique le problème…':'Écris ici…'};
 var chk=function(){$('nomail').hidden=!!($('ml').value.trim()||$('tl').value.trim())};$('ml').oninput=chk;$('tl').oninput=chk;
@@ -101,11 +109,15 @@ function send(data,bt,lab){bt.disabled=true;bt.textContent='Envoi…';
   return S.deriveBits({name:'ECDH',public:pub},kp.privateKey,256)}).then(function(bits){
   var salt=new TextEncoder().encode('agd-qr:'+ID),b=new Uint8Array(bits),all=new Uint8Array(b.length+salt.length);all.set(b);all.set(salt,b.length);
   return S.digest('SHA-256',all)}).then(function(hk){return S.importKey('raw',hk,'AES-GCM',false,['encrypt'])}).then(function(key){
-  var iv=crypto.getRandomValues(new Uint8Array(12));return S.encrypt({name:'AES-GCM',iv:iv},key,new TextEncoder().encode(JSON.stringify(data))).then(function(c){return {e:{x:ej.x,y:ej.y},iv:b64u(iv),c:b64u(c)}})}).then(function(body){
+  var enc1=function(txt){var iv=crypto.getRandomValues(new Uint8Array(12));return S.encrypt({name:'AES-GCM',iv:iv},key,new TextEncoder().encode(txt)).then(function(c){return {e:{x:ej.x,y:ej.y},iv:b64u(iv),c:b64u(c)}})};
+  var ids=[],ch=Promise.resolve();
+  PH.forEach(function(d,i){ch=ch.then(function(){bt.textContent='Envoi de la photo '+(i+1)+'…';var pid=Array.from(crypto.getRandomValues(new Uint8Array(8)),function(b){return ('0'+b.toString(16)).slice(-2)}).join('');
+   return enc1(d).then(function(o){o.p=pid;return fetch(API+'/inp/'+ID,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(o)})}).then(function(r){if(!r.ok)return r.json().then(function(j){throw new Error(j&&j.error||('photo : erreur '+r.status))},function(){throw new Error('photo : erreur '+r.status)});ids.push(pid)})})});
+  return ch.then(function(){bt.textContent='Envoi…';if(ids.length)data.ph=ids;return enc1(JSON.stringify(data))})}).then(function(body){
   return fetch(API+'/in/'+ID,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})}).then(function(r){
   if(!r.ok)return r.json().then(function(j){throw new Error(j&&j.error||('erreur '+r.status))},function(){throw new Error('erreur '+r.status)});
   var pn=String(data.nm||'').split(/\s+/)[0];
-  $('c').innerHTML='<div class="ok"><b>💌</b><h2>Merci'+(pn?' '+E(pn):'')+' !</h2><p>Ton message est bien arrivé chez le bureau de l’amicale.</p>'+(data.ml?'<p>On te répond par mail à <strong style="word-break:break-all">'+E(data.ml)+'</strong>.</p>':data.tl?'<p>On te recontacte au <strong>'+E(data.tl)+'</strong>.</p>':'<p>Il sera lu par le bureau.</p>')+'<button class="go" id="again" style="animation:none">✉️ Écrire un autre message</button></div>';
+  $('c').innerHTML='<div class="ok"><b>💌</b><h2>Merci'+(pn?' '+E(pn):'')+' !</h2><p>Ton message est bien arrivé chez le bureau de l’amicale.</p>'+(data.ml?'<p>On te répond par mail à <strong style="word-break:break-all">'+E(data.ml)+'</strong>.</p>':data.tl?'<p>On te recontacte au <strong>'+E(data.tl)+'</strong>.</p>':'<p>Il sera lu par le bureau.</p>')+(data.ph&&data.ph.length?'<p>📷 '+data.ph.length+' photo'+(data.ph.length>1?'s':'')+' jointe'+(data.ph.length>1?'s':'')+'.</p>':'')+'<button class="go" id="again" style="animation:none">✉️ Écrire un autre message</button></div>';
   $('again').onclick=function(){location.reload()};window.scrollTo(0,0);fxBoom();
  }).catch(function(e){bt.disabled=false;bt.textContent=lab;err('Envoi impossible : '+(e&&e.message||'vérifie ta connexion')+'. Réessaie dans un instant.')});
 }

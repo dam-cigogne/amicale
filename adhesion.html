@@ -148,6 +148,11 @@ function step2(d){var p=price(d);PY='';$('c').hidden=true;var s=$('s2');s.hidden
   e2('');send(d2,$('go2'),'✍️ Signer et envoyer',{p:p,py:PY,pt:DOC.pt,nm:d.nm,pr:d.pr})};
 }
 function enc(tol){var A='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';return ST.map(function(st){var out='',lx=-99,ly=-99;st.forEach(function(q,i){if(i&&i<st.length-1&&Math.abs(q[0]-lx)+Math.abs(q[1]-ly)<tol)return;lx=q[0];ly=q[1];var v=(Math.round(q[0]/2)<<8)|Math.round(q[1]/2);out+=A[(v>>12)&63]+A[(v>>6)&63]+A[v&63]});return out}).filter(Boolean).join('.')}
+/* 2.82.143 : à la fin, rejoindre le groupe WhatsApp de l'amicale (lien collé par le bureau dans l'appli) */
+function waBlock(){if(!DOC||!/^https:\/\/chat\.whatsapp\.com\/[A-Za-z0-9]{10,40}$/.test(DOC.wa||''))return '';var mob=false;try{mob=matchMedia('(pointer:coarse)').matches}catch(e){}
+ return '<div style="margin:1.1rem 0 .3rem;padding:.9rem;border-radius:16px;background:rgba(37,211,102,.12);border:2px solid #25D366;text-align:center"><p style="margin:0 0 .5rem;font-weight:800">💬 Mets-toi dans le groupe WhatsApp de l’amicale pour connaître toutes les infos !</p>'+
+  '<a href="'+E(DOC.wa)+'" target="_blank" rel="noopener" style="display:block;padding:.9rem;border-radius:14px;background:#25D366;color:#fff;font-weight:800;font-size:1.05rem;text-decoration:none">💬 Rejoindre le groupe WhatsApp</a>'+
+  (!mob&&/^data:image\/png;base64,/.test(DOC.waq||'')?'<img alt="QR code du groupe WhatsApp" src="'+DOC.waq+'" style="width:190px;max-width:70%;margin:.8rem auto .2rem;display:block;background:#fff;border-radius:10px"><p class="mut" style="margin:0">Sur ordinateur : scanne ce QR code avec ton téléphone.</p>':'')+'</div>'}
 function send(data,bt,lab,sig){bt.disabled=true;bt.textContent='Envoi…';var pr=data.pr;
  var S=crypto.subtle,kp,ej;
  S.generateKey({name:'ECDH',namedCurve:'P-256'},true,['deriveBits']).then(function(k){kp=k;return S.exportKey('jwk',k.publicKey)}).then(function(j){ej=j;
@@ -161,8 +166,8 @@ function send(data,bt,lab,sig){bt.disabled=true;bt.textContent='Envoi…';var pr
   var box=sig?$('s2'):$('c');
   box.innerHTML=sig?'<div class="ok"><b>🎉</b><h2>Bienvenue à l’amicale !</h2><p>Merci '+E(pr)+'. Ton bulletin signé est bien arrivé chez le bureau.</p>'+
    '<div class="pay" style="text-align:left">'+(sig.py==='vir'?'🏦 <strong>Dernière étape :</strong> fais ton virement'+(sig.p!==''?' de <big>'+E(eur(sig.p))+'</big>':'')+' en indiquant « Adhésion '+E(String(sig.nm).toUpperCase()+' '+sig.pr)+' ». Demande le RIB à un membre du bureau.':'🤝 <strong>Dernière étape :</strong> passe voir un membre du bureau pour régler'+(sig.p!==''?' <big>'+E(eur(sig.p))+'</big>':' ta cotisation')+' '+({cb:'par carte (SumUp)',chq:'par chèque',esp:'en espèces'}[sig.py]||'')+'.')+'</div>'+
-   (sig.pt?'<p style="font-size:1.1rem;margin-top:1rem">🎁 <strong>Ton patch de bienvenue t’attend !</strong><br>Passe le récupérer auprès du bureau.</p>':'')+'</div>'
-   :'<div class="ok"><b>🎉</b><h2>C’est envoyé !</h2><p>Merci '+E(pr)+'. Ta demande d’adhésion est bien arrivée chez le bureau.</p><p><strong>Dernière étape :</strong> passe voir le bureau pour régler ta cotisation et signer ton bulletin. Tout sera déjà rempli.</p></div>';
+   (sig.pt?'<p style="font-size:1.1rem;margin-top:1rem">🎁 <strong>Ton patch de bienvenue t’attend !</strong><br>Passe le récupérer auprès du bureau.</p>':'')+waBlock()+'</div>'
+   :'<div class="ok"><b>🎉</b><h2>C’est envoyé !</h2><p>Merci '+E(pr)+'. Ta demande d’adhésion est bien arrivée chez le bureau.</p><p><strong>Dernière étape :</strong> passe voir le bureau pour régler ta cotisation et signer ton bulletin. Tout sera déjà rempli.</p>'+waBlock()+'</div>';
   box.hidden=false;window.scrollTo(0,0);fxBoom();
  }).catch(function(e){bt.disabled=false;bt.textContent=lab;var m='Envoi impossible : '+(e&&e.message||'vérifie ta connexion')+'. Réessaie dans un instant.';if(sig){var x=$('er2');x.textContent=m;x.hidden=false}else err(m)});
 }
