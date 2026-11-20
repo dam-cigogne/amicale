@@ -60,6 +60,7 @@ input:focus,textarea:focus{outline:none;border-color:var(--ac)}
 <body>
 <div class="top"><small id="g">Menu</small><h1 id="t">Choisis ton menu</h1><p id="w"></p></div>
 <div class="wrap"><div class="card" id="c"><div id="f"></div>
+<label style="display:flex;gap:.6rem;align-items:flex-start;font-weight:400;margin-top:1rem"><input type="checkbox" id="okd" style="width:22px;height:22px;flex:none;margin:.1rem 0 0"><span>J’accepte que ces informations soient envoyées à l’amicale pour organiser le repas (mes choix de menu).<br><small style="color:var(--mut);display:block;margin-top:.3rem;line-height:1.4">🔒 Elles sont <b>chiffrées sur mon téléphone</b> avant l’envoi, puis gardées sur un serveur (Cloudflare) qui <b>ne peut pas les lire</b> : seuls les responsables de l’amicale ont la clé. Elles ne sont <b>ni vendues ni partagées</b>, et je peux demander au bureau de les corriger ou de les supprimer à tout moment. Aucun système n’étant infaillible à 100 %, je n’indique que ce qui est utile.</small></span></label>
 <button class="go" id="go">✅ Envoyer mon choix</button>
 <p class="err" id="er" hidden></p>
 <p class="mut" style="margin:.8rem 0 0">🔒 Ton choix est chiffré sur ton téléphone : seuls les organisateurs peuvent le lire. Tu peux rouvrir ce lien pour le modifier tant que les organisateurs n’ont pas transmis les totaux au traiteur.</p>
@@ -101,6 +102,7 @@ document.addEventListener('input',function(e){var t=e.target;if(t.dataset&&t.dat
 document.addEventListener('click',function(e){var b=e.target.closest('.op');if(!b)return;CH[+b.dataset.i][+b.dataset.c]=+b.dataset.k;var y=window.scrollY;draw();window.scrollTo(0,y)});
 function err(t){var e=$('er');e.textContent=t;e.hidden=!t}
 $('go').addEventListener('click',function(){
+ if(!$('okd').checked){err('Coche la case d’accord (en bas) pour envoyer.');try{$('okd').scrollIntoView({block:'center'})}catch(e){}return}
  for(var i=0;i<CH.length;i++)for(var c=0;c<TP.length;c++)if(CH[i][c]===null){err('Il manque un choix : '+(i===0&&S0[0].k==='a'?'toi':(NM[i]||(S0[i].k==='a'?'adulte '+(i+1):'enfant')))+' · '+TP[c].l+'.');return}
  err('');var bt=$('go');bt.disabled=true;bt.textContent='Envoi…';
  var data={k:'mn',pid:GEN?'':info.i,gn:GEN?GN:undefined,na:na,ne:ne,s:info.s||'',L:S0.map(function(s,i){return {n:String(i===0&&s.k==='a'?'':NM[i]||'').trim().slice(0,30),c:CH[i]}}),v:1};

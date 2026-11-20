@@ -63,6 +63,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--ac)}
 <label>Es-tu amicaliste ?</label><div class="seg" id="am"><button type="button" data-v="o">Oui</button><button type="button" data-v="n">Non</button><button type="button" data-v="">Je ne sais pas</button></div>
 <label for="rg">Régime ou allergies <small>(facultatif : végétarien, sans porc, allergie aux noix…)</small></label><input id="rg" maxlength="40">
 <label for="mo">Un petit mot <small>(facultatif)</small></label><textarea id="mo" rows="2" maxlength="200"></textarea>
+<label style="display:flex;gap:.6rem;align-items:flex-start;font-weight:400;margin-top:1rem"><input type="checkbox" id="okd" style="width:22px;height:22px;flex:none;margin:.1rem 0 0"><span>J’accepte que ces informations soient envoyées à l’amicale pour organiser cet événement (inscription, repas, paiement).<br><small style="color:var(--mut);display:block;margin-top:.3rem;line-height:1.4">🔒 Elles sont <b>chiffrées sur mon téléphone</b> avant l’envoi, puis gardées sur un serveur (Cloudflare) qui <b>ne peut pas les lire</b> : seuls les responsables de l’amicale ont la clé. Elles ne sont <b>ni vendues ni partagées</b>, et je peux demander au bureau de les corriger ou de les supprimer à tout moment. Aucun système n’étant infaillible à 100 %, je n’indique que ce qui est utile.</small></span></label>
 <button class="go" id="go">✅ Envoyer mon inscription</button>
 <p class="err" id="er" hidden></p>
 <p class="mut" style="margin:.8rem 0 0">🔒 Tes informations sont chiffrées sur ton téléphone : seuls les organisateurs peuvent les lire. Elles servent uniquement à organiser cet événement.</p>
@@ -96,6 +97,7 @@ document.addEventListener('click',function(e){var b=e.target.closest('button');i
  else if(b.parentNode&&b.parentNode.id==='am'){AM=b.dataset.v;[].forEach.call($('am').children,function(x){x.classList.toggle('on',x===b)})}});
 function err(t){var e=$('er');e.textContent=t;e.hidden=!t}
 $('go').addEventListener('click',function(){
+ if(!$('okd').checked){err('Coche la case d’accord (en bas) pour envoyer.');try{$('okd').scrollIntoView({block:'center'})}catch(e){}return}
  var nm=$('nm').value.trim(),pr=$('pr').value.trim(),na=Math.max(0,Math.min(30,parseInt($('na').value,10)||0)),ne=Math.max(0,Math.min(30,parseInt($('ne').value,10)||0)),tl=$('tl').value.trim();
  if(!nm||!pr){err('Merci d’écrire ton nom et ton prénom.');return}
  if(!GRV){err('Choisis ton grade (ou « Civil », « Extérieur »).');return}

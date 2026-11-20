@@ -70,6 +70,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--ac)}
 <label for="ml">Ton mail <small>(pour qu’on puisse te répondre)</small></label><input id="ml" type="email" autocomplete="email" maxlength="80">
 <label for="tl">Ton téléphone <small>(facultatif)</small></label><input id="tl" type="tel" autocomplete="tel" maxlength="20">
 <p class="mut" id="nomail" style="margin:.5rem 0 0">Sans mail ni téléphone, on ne pourra pas te répondre : ton message reste quand même lu par le bureau.</p>
+<label style="display:flex;gap:.6rem;align-items:flex-start;font-weight:400;margin-top:1rem"><input type="checkbox" id="okd" style="width:22px;height:22px;flex:none;margin:.1rem 0 0"><span>J’accepte que ces informations soient envoyées à l’amicale pour traiter mon message (et mes photos s’il y en a).<br><small style="color:var(--mut);display:block;margin-top:.3rem;line-height:1.4">🔒 Elles sont <b>chiffrées sur mon téléphone</b> avant l’envoi, puis gardées sur un serveur (Cloudflare) qui <b>ne peut pas les lire</b> : seuls les responsables de l’amicale ont la clé. Elles ne sont <b>ni vendues ni partagées</b>, et je peux demander au bureau de les corriger ou de les supprimer à tout moment. Aucun système n’étant infaillible à 100 %, je n’indique que ce qui est utile.</small></span></label>
 <button class="go" id="go">📨 Envoyer mon message</button>
 <p class="err" id="er" hidden></p>
 <p class="mut" style="margin:.8rem 0 0">🔒 Ton message est chiffré sur ton téléphone : seul le bureau de l’amicale peut le lire.</p>
@@ -97,6 +98,7 @@ var chk=function(){$('nomail').hidden=!!($('ml').value.trim()||$('tl').value.tri
 function err(t){var e=$('er');e.textContent=t;e.hidden=!t}
 var E=function(t){return String(t==null?'':t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
 $('go').addEventListener('click',function(){
+ if(!$('okd').checked){err('Coche la case d’accord (en bas) pour envoyer.');try{$('okd').scrollIntoView({block:'center'})}catch(e){}return}
  var g=function(i){return $(i).value.trim()},x=g('x'),ml=g('ml');
  if(x.length<3){err('Écris ton message.');return}
  if(ml&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(ml)){err('Ton mail ne semble pas complet.');return}

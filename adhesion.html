@@ -71,7 +71,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--ac)}
 <label>Étais-tu déjà amicaliste l’an dernier ?</label><div class="seg" id="am"><button type="button" data-v="o">Oui</button><button type="button" data-v="n">Non, c’est nouveau</button></div>
 <label for="rg">Régime ou allergies <small>(facultatif : végétarien, sans porc, allergie aux noix…)</small></label><input id="rg" maxlength="40">
 <label for="mo">Un petit mot <small>(facultatif)</small></label><textarea id="mo" rows="2" maxlength="200"></textarea>
-<label style="display:flex;gap:.6rem;align-items:flex-start;font-weight:400;margin-top:1rem"><input type="checkbox" id="ok" style="width:22px;height:22px;flex:none;margin:0"><span>J’accepte que l’amicale garde ces informations pour gérer mon adhésion et me tenir au courant de ses activités.</span></label>
+<label style="display:flex;gap:.6rem;align-items:flex-start;font-weight:400;margin-top:1rem"><input type="checkbox" id="ok" style="width:22px;height:22px;flex:none;margin:.1rem 0 0"><span>J’accepte que ces informations soient envoyées à l’amicale pour gérer mon adhésion et me tenir au courant de ses activités.<br><small style="color:var(--mut);display:block;margin-top:.3rem;line-height:1.4">🔒 Elles sont <b>chiffrées sur mon téléphone</b> avant l’envoi, puis gardées sur un serveur (Cloudflare) qui <b>ne peut pas les lire</b> : seuls les responsables de l’amicale ont la clé. Elles ne sont <b>ni vendues ni partagées</b>, et je peux demander au bureau de les corriger ou de les supprimer à tout moment. Aucun système n’étant infaillible à 100 %, je n’indique que ce qui est utile.</small></span></label>
 <button class="go" id="go">✅ Envoyer ma demande d’adhésion</button>
 <p class="err" id="er" hidden></p>
 <p class="mut" style="margin:.8rem 0 0">🔒 Tes informations sont chiffrées sur ton téléphone : seuls les organisateurs peuvent les lire. Elles servent uniquement à l’amicale.</p>
@@ -103,7 +103,7 @@ $('go').addEventListener('click',function(){
  if(!nm||!pr){err('Merci d’écrire ton nom et ton prénom.');return}
  if(!g('gr')){err('Choisis ton grade (ou « Civil », « Extérieur »).');return}
  if(!tl&&!g('ml')){err('Laisse un téléphone ou un mail pour qu’on puisse te joindre.');return}
- if(!$('ok').checked){err('Coche la case d’accord en bas pour envoyer.');return}
+ if(!$('ok').checked){err('Coche la case d’accord (en bas) pour envoyer.');return}
  err('');var data={t:'ad',nm:nm,pr:pr,gr:g('gr'),sv:g('sv'),ct:g('ct'),tl:tl,ml:g('ml'),an:AM,rg:g('rg'),mo:g('mo'),ok:1,v:1};
  if(DOC){step2(data);return}
  send(data,$('go'),'✅ Envoyer ma demande d’adhésion',null);
