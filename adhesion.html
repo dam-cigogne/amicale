@@ -117,7 +117,7 @@ function regHtml(d){var h='';if(DOC.ti)h+='<div class="ti">'+E(DOC.ti).replace(/
  else{h+='<p>'+E(String(DOC.intro||'').replace(/\{nom\}/g,d.pr+' '+d.nm).replace(/\{grade\}/g,d.gr).replace(/\{asso\}/g,DOC.g||'l’amicale').replace(/\{annee\}/g,String(new Date().getFullYear())))+'</p>';var cl=String(DOC.cl||'').split(/\r?\n/).filter(Boolean);if(cl.length)h+='<ul>'+cl.map(function(x){return '<li>'+E(x)+'</li>'}).join('')+'</ul>'}
  var bu=(DOC.bu||[]).slice().sort(function(a,b){return (a.l-b.l)||(a.c-b.c)});if(bu.length)h+='<div class="bu">'+bu.map(function(x){return '<div><u>'+E(x.r)+'</u>'+E(x.n)+(x.s&&/^data:image\/(png|jpeg);base64,/.test(x.s)?'<br><img src="'+x.s+'" alt="">':'')+'</div>'}).join('')+'</div>';
  h+='<div class="me">Grade : <b>'+E(d.gr)+'</b> · Prénom : <b>'+E(d.pr)+'</b> · Nom : <b>'+E(String(d.nm).toUpperCase())+'</b>'+(d.sv?' · Service : <b>'+E(d.sv)+'</b>':'')+'<br>'+E(DOC.ac||'Accepte le présent document en tant qu’adhérent.')+'<br>Pris connaissance le : <b>'+new Date().toLocaleDateString('fr-FR')+'</b></div>';
- if(DOC.rgpd)h+='<p style="font-size:.75rem;color:#555;margin-top:8px"><i>'+E(DOC.rgpd)+'</i></p>';
+ if(DOC.rgpd)h+='<div style="border:1px solid #999;border-radius:8px;padding:7px 10px;margin-top:10px;font-size:.8rem;line-height:1.4;color:#222;white-space:pre-wrap">🔒 '+E(DOC.rgpd)+'</div>';
  return h}
 var ST=[],cur=null;
 function step2(d){var p=price(d);PY='';$('c').hidden=true;var s=$('s2');s.hidden=false;
