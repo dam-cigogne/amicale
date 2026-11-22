@@ -60,7 +60,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--ac)}
 <div><label>Enfants</label><div class="num"><button type="button" data-n="ne" data-d="-1">−</button><input id="ne" inputmode="numeric" value="0"><button type="button" data-n="ne" data-d="1">+</button></div></div></div>
 <label for="tl">Téléphone</label><input id="tl" type="tel" autocomplete="tel" maxlength="20">
 <label for="ml">Mail <small>(facultatif)</small></label><input id="ml" type="email" autocomplete="email" maxlength="80">
-<label>Es-tu amicaliste ?</label><div class="seg" id="am"><button type="button" data-v="o">Oui</button><button type="button" data-v="n">Non</button><button type="button" data-v="">Je ne sais pas</button></div>
+<label id="amq">Es-tu amicaliste ?</label><div class="seg" id="am"><button type="button" data-v="o">Oui</button><button type="button" data-v="n">Non</button><button type="button" data-v="">Je ne sais pas</button></div>
 <label for="rg">Régime ou allergies <small>(facultatif : végétarien, sans porc, allergie aux noix…)</small></label><input id="rg" maxlength="40">
 <label for="mo">Un petit mot <small>(facultatif)</small></label><textarea id="mo" rows="2" maxlength="200"></textarea>
 <label style="display:flex;gap:.6rem;align-items:flex-start;font-weight:400;margin-top:1rem"><input type="checkbox" id="okd" style="width:22px;height:22px;flex:none;margin:.1rem 0 0"><span>J’accepte que ces informations soient envoyées à l’amicale pour organiser cet événement (inscription, repas, paiement).<br><small style="color:var(--mut);display:block;margin-top:.3rem;line-height:1.4">🔒 Elles sont <b>chiffrées sur mon téléphone</b> avant l’envoi, puis gardées sur un serveur (Cloudflare) qui <b>ne peut pas les lire</b> : seuls les responsables de l’amicale ont la clé. Elles ne sont <b>ni vendues ni partagées</b>, et je peux demander au bureau de les corriger ou de les supprimer à tout moment. Aucun système n’étant infaillible à 100 %, je n’indique que ce qui est utile.</small></span></label>
@@ -158,5 +158,5 @@ var b=document.createElement('a');b.href='./';b.id='agd-back';b.textContent='←
 b.setAttribute('style','position:fixed;left:12px;top:12px;top:calc(env(safe-area-inset-top, 0px) + 8px);z-index:99999;background:#ffffff;color:#4c1d95;border:2px solid #7c3aed;border-radius:999px;padding:9px 16px;font:700 16px -apple-system,system-ui,sans-serif;box-shadow:0 2px 12px rgba(0,0,0,.25);text-decoration:none');
 document.body.appendChild(b)}catch(e){}})();
 </script>
-</body>
+<script>var AMW=(function(){try{var m=/[?&]w=([^&#]+)/.exec(location.search);var o=JSON.parse(decodeURIComponent(m[1]));return o&&typeof o==='object'?o:{}}catch(e){return {}}})();function amw(k,d){var v=AMW[k];return typeof v==='string'&&v.trim()?v.trim().slice(0,40):d}function amwc(k,d){var v=amw(k,d);return v.charAt(0).toUpperCase()+v.slice(1)}var aq=document.getElementById('amq');if(aq){aq.textContent='Es-tu '+amw('s','amicaliste')+' ?';}</script></body>
 </html>

@@ -56,7 +56,7 @@ th{color:var(--gold);font-weight:700;font-size:.82rem;text-transform:uppercase;l
 <div class="wrap" id="w"><p class="msg">Chargement du menu…</p></div>
 <script>
 (function(){
-var API=(function(d){try{var m=/[?&]s=([^&#]+)/.exec(location.search);if(m){var u=decodeURIComponent(m[1]);if(/^https:\/\/[a-z0-9.-]+(\/[^\s?#]*)?$/i.test(u))return u.replace(/\/+$/,'')}}catch(e){}return d})('https://agendam-famille.dam-cigogne.workers.dev'),W=document.getElementById('w');
+var AMW=(function(){try{var m=/[?&]w=([^&#]+)/.exec(location.search);var o=JSON.parse(decodeURIComponent(m[1]));return o&&typeof o==='object'?o:{}}catch(e){return {}}})();function amw(k,d){var v=AMW[k];return typeof v==='string'&&v.trim()?v.trim().slice(0,40):d}function amwc(k,d){var v=amw(k,d);return v.charAt(0).toUpperCase()+v.slice(1)}var API=(function(d){try{var m=/[?&]s=([^&#]+)/.exec(location.search);if(m){var u=decodeURIComponent(m[1]);if(/^https:\/\/[a-z0-9.-]+(\/[^\s?#]*)?$/i.test(u))return u.replace(/\/+$/,'')}}catch(e){}return d})('https://agendam-famille.dam-cigogne.workers.dev'),W=document.getElementById('w');
 function esc(t){return String(t==null?'':t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function eur(n){n=+n||0;return n?(Math.round(n*100)/100).toString().replace('.',',')+' €':'—'}
 function parse(t){var out=[],cur=null;String(t||'').replace(/\r/g,'').split('\n').forEach(function(l){var x=l.trim();if(!x)return;var m=x.match(/^([^:\-•*–][^:]{0,40}?)\s*:\s*(.*)$/);if(m&&!/^[-•*–]/.test(x)){cur={h:m[1].trim(),L:[]};out.push(cur);x=m[2].trim();if(!x)return}x=x.replace(/^[-•*–]\s*/,'');if(!cur){cur={h:'',L:[]};out.push(cur)}cur.L.push(x)});return out}
@@ -73,7 +73,7 @@ fetch(API+'/pub/'+id,{cache:'no-store'}).then(function(r){if(r.status===404)thro
  h+=(d.img?'<details class="txt"><summary>Version texte du menu</summary>':'')+'<div class="card '+cls+'">'+(S.length?S.map(function(x){return (x.h?'<div class="mh">'+esc(x.h)+'</div><div class="orn">❦</div>':'')+x.L.map(function(v){return '<div class="mi">'+esc(v)+'</div>'}).join('')}).join(''):'<p class="mi"><i>Le menu arrive bientôt…</i></p>')+'</div>';
  if(d.img)h+='</details>';
  if(d.p&&d.p.length){var hc=d.p.some(function(r){return r[3]!=null}),he=d.p.some(function(r){return r[4]!=null}),pv=function(v){return v==null?'':(+v?eur(v):'Gratuit')};
-  h+='<div class="card"><h2>💶 Tarifs</h2>'+d.p.map(function(r){var L=[['🎖 Amicaliste',eur(r[1])]];if(hc&&r[3]!=null)L.push(['🤝 Accompagnant d’un amicaliste',pv(r[3])]);L.push(['👤 Non-amicaliste',eur(r[2])]);if(he&&r[4]!=null)L.push(['🧒 Enfant',pv(r[4])]);
+  h+='<div class="card"><h2>💶 Tarifs</h2>'+d.p.map(function(r){var L=[['🎖 '+amwc('s','amicaliste'),eur(r[1])]];if(hc&&r[3]!=null)L.push(['🤝 Accompagnant d’un '+amw('s','amicaliste'),pv(r[3])]);L.push(['👤 '+amwc('ns','non-amicaliste'),eur(r[2])]);if(he&&r[4]!=null)L.push(['🧒 Enfant',pv(r[4])]);
    return '<div class="pr"><div class="pr-h">'+esc(r[0])+'</div>'+L.map(function(x){return '<div class="pr-l"><span>'+x[0]+'</span><b>'+x[1]+'</b></div>'}).join('')+'</div>'}).join('')+'</div>'}
  h+='<div class="foot">Mis à jour le '+esc(new Date(j.at).toLocaleString('fr-FR',{day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'}))+'</div>';
  W.innerHTML=h;
