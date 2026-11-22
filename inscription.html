@@ -70,7 +70,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--ac)}
 </div></div>
 <script>
 (function(){
-var API='https://agendam-famille.dam-cigogne.workers.dev';
+var API=(function(d){try{var m=/[?&]s=([^&#]+)/.exec(location.search);if(m){var u=decodeURIComponent(m[1]);if(/^https:\/\/[a-z0-9.-]+(\/[^\s?#]*)?$/i.test(u))return u.replace(/\/+$/,'')}}catch(e){}return d})('https://agendam-famille.dam-cigogne.workers.dev');
 var $=function(i){return document.getElementById(i)};
 function b64u(buf){var s='',a=new Uint8Array(buf);for(var i=0;i<a.length;i++)s+=String.fromCharCode(a[i]);return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
 function ub64u(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';var b=atob(s),u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u}

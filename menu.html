@@ -56,7 +56,7 @@ th{color:var(--gold);font-weight:700;font-size:.82rem;text-transform:uppercase;l
 <div class="wrap" id="w"><p class="msg">Chargement du menu…</p></div>
 <script>
 (function(){
-var API='https://agendam-famille.dam-cigogne.workers.dev',W=document.getElementById('w');
+var API=(function(d){try{var m=/[?&]s=([^&#]+)/.exec(location.search);if(m){var u=decodeURIComponent(m[1]);if(/^https:\/\/[a-z0-9.-]+(\/[^\s?#]*)?$/i.test(u))return u.replace(/\/+$/,'')}}catch(e){}return d})('https://agendam-famille.dam-cigogne.workers.dev'),W=document.getElementById('w');
 function esc(t){return String(t==null?'':t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function eur(n){n=+n||0;return n?(Math.round(n*100)/100).toString().replace('.',',')+' €':'—'}
 function parse(t){var out=[],cur=null;String(t||'').replace(/\r/g,'').split('\n').forEach(function(l){var x=l.trim();if(!x)return;var m=x.match(/^([^:\-•*–][^:]{0,40}?)\s*:\s*(.*)$/);if(m&&!/^[-•*–]/.test(x)){cur={h:m[1].trim(),L:[]};out.push(cur);x=m[2].trim();if(!x)return}x=x.replace(/^[-•*–]\s*/,'');if(!cur){cur={h:'',L:[]};out.push(cur)}cur.L.push(x)});return out}
